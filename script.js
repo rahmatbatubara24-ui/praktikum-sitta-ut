@@ -1,60 +1,114 @@
 ```javascript
-// ============================================
-// SITTA - SISTEM INFORMASI TATA BAHAN AJAR
-// Praktikum STSI4209
-// ============================================
+/*
+====================================================
+ SITTA - SISTEM INFORMASI TATA KELOLA BAHAN AJAR
+ Integrasi Supabase
+====================================================
+*/
 
-// Menjalankan program setelah HTML selesai dimuat
-document.addEventListener("DOMContentLoaded", function () {
-    inisialisasiNavigasi();
-    tampilkanDashboard();
+// ================================================
+// 1. KONFIGURASI SUPABASE
+// ================================================
+
+const SITTA_CONFIG = window.sittaSupabaseConfig || {};
+
+let sittaDB = null;
+let daftarBahanAjar = [];
+let halamanAktif = "dashboard";
+
+// ================================================
+// 2. INISIALISASI APLIKASI
+// ================================================
+
+document.addEventListener("DOMContentLoaded", async function () {
+    pasangNavigasi();
+    pasangFormTracking();
+    pasangFormPemesanan();
+    pasangPencarianBuku();
+
+    if (
+        window.supabase &&
+        SITTA_CONFIG.url &&
+        SITTA_CONFIG.key &&
+        SITTA_CONFIG.key !== "TEMPELKAN_PUBLISHABLE_KEY_ANDA_DI_SINI"
+    ) {
+        try {
+            sittaDB = window.supabase.createClient(
+                SITTA_CONFIG.url,
+                SITTA_CONFIG.key
+            );
+
+            await muatDataBahanAjar();
+            await muatRingkasanTracking();
+        } catch (error) {
+            console.error("Gagal menginisialisasi Supabase:", error);
+            tampilkanNotifikasi(
+                "Koneksi database gagal. Periksa konfigurasi Supabase.",
+                "error"
+            );
+        }
+    } else {
+        tampilkanNotifikasi(
+            "Supabase belum terhubung. Periksa URL dan publishable key di index.html.",
+            "error"
+        );
+    }
+
+    perbaruiTampilanDashboard();
     tampilkanKatalog();
-    inisialisasiPencarian();
-    inisialisasiTracking();
-    inisialisasiPemesanan();
+    isiPilihanBuku();
 });
 
-// ============================================
-// 1. NAVIGASI HALAMAN
-// ============================================
+// ================================================
+// 3. NAVIGASI HALAMAN
+// ================================================
 
-function inisialisasiNavigasi() {
-    var tombolNavigasi = document.querySelectorAll(".nav-btn");
+function pasangNavigasi() {
+    const tombolNavigasi = document.querySelectorAll(".nav-btn");
 
     tombolNavigasi.forEach(function (tombol) {
         tombol.addEventListener("click", function () {
-            var namaHalaman = tombol.getAttribute("data-page");
-            bukaHalaman(namaHalaman);
+            const tujuan = tombol.dataset.page;
+
+            if (!tujuan) return;
+
+            bukaHalaman(tujuan);
+        });
+    });
+
+    document.querySelectorAll("[data-go]").forEach(function (tombol) {
+        tombol.addEventListener("click", function () {
+            bukaHalaman(tombol.dataset.go);
         });
     });
 }
 
 function bukaHalaman(namaHalaman) {
-    var semuaHalaman = document.querySelectorAll(".page");
-    var semuaTombol = document.querySelectorAll(".nav-btn");
-    var halamanTujuan = document.getElementById(namaHalaman);
+    const halamanTujuan = document.getElementById(namaHalaman);
 
-    if (!halamanTujuan) {
-        tampilkanNotifikasi("Halaman tidak ditemukan.");
-        return;
-    }
+    if (!halamanTujuan) return;
 
-    semuaHalaman.forEach(function (halaman) {
+    document.querySelectorAll(".page").forEach(function (halaman) {
         halaman.classList.remove("active");
-    });
-
-    semuaTombol.forEach(function (tombol) {
-        tombol.classList.remove("active");
     });
 
     halamanTujuan.classList.add("active");
 
-    var tombolAktif = document.querySelector(
-        '.nav-btn[data-page="' + namaHalaman + '"]'
-    );
+    document.querySelectorAll(".nav-btn").forEach(function (tombol) {
+        tombol.classList.toggle(
+            "active",
+            tombol.dataset.page === namaHalaman
+        );
+    });
 
-    if (tombolAktif) {
-        tombolAktif.classList.add("active");
+    halamanAktif = namaHalaman;
+
+    if (namaHalaman === "katalog") {
+        tampilkanKatalog();
+    }
+
+    if (namaHalaman === "pemesanan") {
+        isiPilihanBuku();
     }
 
     window.scrollTo({
@@ -63,426 +117,616 @@ function bukaHalaman(namaHalaman) {
     });
 }
 
-// ============================================
-// 2. DASHBOARD
-// ============================================
+// ================================================
+// 4. NOTIFIKASI
+// ================================================
 
-function tampilkanDashboard() {
-    var elemenTotalBuku = document.getElementById("totalBuku");
-    var elemenTotalStok = document.getElementById("totalStok");
-    var elemenTotalTracking = document.getElementById("totalTracking");
-    var elemenBukuPilihan = document.getElementById("bukuPilihan");
+function tampilkanNotifikasi(pesan, jenis = "info") {
+    const elemen = document.getElementById("notifikasi");
 
-    var totalStok = dataBahanAjar.reduce(function (total, buku) {
-        return total + Number(buku.stok);
-    }, 0);
-
-    if (elemenTotalBuku) {
-        elemenTotalBuku.textContent = dataBahanAjar.length;
-    }
-
-    if (elemenTotalStok) {
-        elemenTotalStok.textContent = totalStok.toLocaleString("id-ID");
-    }
-
-    if (elemenTotalTracking) {
-        elemenTotalTracking.textContent =
-            Object.keys(dataTracking).length;
-    }
-
-    if (elemenBukuPilihan) {
-        elemenBukuPilihan.innerHTML = dataBahanAjar
-            .slice(0, 3)
-            .map(function (buku, indeks) {
-                return buatKartuBuku(buku, indeks);
-            })
-            .join("");
-    }
-}
-
-// ============================================
-// 3. KARTU BAHAN AJAR
-// ============================================
-
-function buatKartuBuku(buku, indeks) {
-    var kelasWarna = ["", "color-2", "color-3"][indeks % 3];
-
-    return `
-        <article class="book-card">
-            <div class="book-cover ${kelasWarna}">
-                <small>UNIVERSITAS TERBUKA · ${escapeHTML(buku.jenisBarang)}</small>
-                <strong>${escapeHTML(buku.namaBarang)}</strong>
-                <small>Kode: ${escapeHTML(buku.kodeBarang)}</small>
-            </div>
-            <div class="book-info">
-                <span class="pill">${escapeHTML(buku.jenisBarang)}</span>
-                <h3>${escapeHTML(buku.namaBarang)}</h3>
-                <p>Kode lokasi: ${escapeHTML(buku.kodeLokasi)}</p>
-                <p>Edisi: ${escapeHTML(buku.edisi)}</p>
-                <p>Stok tersedia: <strong>${Number(buku.stok)}</strong></p>
-                <button
-                    type="button"
-                    class="primary-btn"
-                    onclick="pilihBuku('${escapeHTML(buku.kodeBarang)}')">
-                    Pesan Bahan Ajar
-                </button>
-            </div>
-        </article>
-    `;
-}
-
-// ============================================
-// 4. KATALOG BAHAN AJAR
-// ============================================
-
-function tampilkanKatalog(daftarBuku) {
-    var tabelBuku = document.getElementById("tabelBuku");
-    var jumlahHasil = document.getElementById("jumlahHasil");
-
-    if (!tabelBuku) {
+    if (!elemen) {
+        console.log(pesan);
         return;
     }
 
-    var daftar = daftarBuku || dataBahanAjar;
+    elemen.textContent = pesan;
+    elemen.className = "notification";
+
+    if (jenis === "error") {
+        elemen.classList.add("error-message");
+    } else if (jenis === "success") {
+        elemen.classList.add("success-message");
+    }
+
+    elemen.hidden = false;
+}
+
+function sembunyikanNotifikasi() {
+    const elemen = document.getElementById("notifikasi");
+
+    if (elemen) {
+        elemen.hidden = true;
+        elemen.textContent = "";
+    }
+}
+
+// ================================================
+// 5. MEMUAT DATA BAHAN AJAR DARI SUPABASE
+// ================================================
+
+async function muatDataBahanAjar() {
+    if (!sittaDB) return;
+
+    const { data, error } = await sittaDB
+        .from("bahan_ajar")
+        .select("*")
+        .order("kode_barang", { ascending: true });
+
+    if (error) {
+        console.error("Gagal memuat bahan ajar:", error);
+
+        daftarBahanAjar = [];
+        tampilkanKatalog();
+        isiPilihanBuku();
+
+        tampilkanNotifikasi(
+            "Data bahan ajar belum dapat dimuat. Pastikan tabel bahan_ajar sudah dibuat di Supabase dan kebijakan aksesnya benar.",
+            "error"
+        );
+
+        return;
+    }
+
+    daftarBahanAjar = (data || []).map(function (baris) {
+        return {
+            id: baris.id,
+            kodeLokasi: baris.kode_lokasi,
+            kodeBarang: baris.kode_barang,
+            namaBarang: baris.nama_barang,
+            jenisBarang: baris.jenis_barang,
+            edisi: baris.edisi,
+            stok: Number(baris.stok || 0),
+            cover: baris.cover
+        };
+    });
+
+    tampilkanKatalog();
+    isiPilihanBuku();
+    perbaruiTampilanDashboard();
+}
+
+// ================================================
+// 6. DASHBOARD
+// ================================================
+
+async function muatRingkasanTracking() {
+    if (!sittaDB) return;
+
+    const { count, error } = await sittaDB
+        .from("tracking")
+        .select("*", { count: "exact", head: true });
+
+    if (error) {
+        console.error("Gagal menghitung tracking:", error);
+        return;
+    }
+
+    const elemenTracking = document.getElementById("totalTracking");
+
+    if (elemenTracking) {
+        elemenTracking.textContent = count ?? 0;
+    }
+}
+
+function perbaruiTampilanDashboard() {
+    const totalBuku = document.getElementById("totalBuku");
+    const totalStok = document.getElementById("totalStok");
+    const bukuPilihan = document.getElementById("bukuPilihan");
+
+    if (totalBuku) {
+        totalBuku.textContent = daftarBahanAjar.length;
+    }
+
+    if (totalStok) {
+        totalStok.textContent = daftarBahanAjar.reduce(
+            function (total, buku) {
+                return total + Number(buku.stok || 0);
+            },
+            0
+        ).toLocaleString("id-ID");
+    }
+
+    if (bukuPilihan) {
+        const pilihan = daftarBahanAjar.slice(0, 3);
+
+        if (pilihan.length === 0) {
+            bukuPilihan.innerHTML =
+                '<p class="empty-state">Belum ada data bahan ajar. Pastikan data sudah dimasukkan ke Supabase.</p>';
+        } else {
+            bukuPilihan.innerHTML = pilihan.map(function (buku) {
+                return `
+                    <article class="book-card">
+                        <div class="book-cover">
+                            <span>${escapeHTML(buku.jenisBarang || "BMP")}</span>
+                        </div>
+                        <div class="book-info">
+                            <h3>${escapeHTML(buku.namaBarang)}</h3>
+                            <p>Kode: ${escapeHTML(buku.kodeBarang)}</p>
+                            <p>Edisi: ${escapeHTML(buku.edisi || "-")}</p>
+                            <p>Stok: ${Number(buku.stok).toLocaleString("id-ID")}</p>
+                        </div>
+                    </article>
+                `;
+            }).join("");
+        }
+    }
+}
+
+// ================================================
+// 7. KATALOG DAN PENCARIAN
+// ================================================
+
+function pasangPencarianBuku() {
+    const kolomCari = document.getElementById("cariBuku");
+    const filterJenis = document.getElementById("filterJenis");
+
+    if (kolomCari) {
+        kolomCari.addEventListener("input", tampilkanKatalog);
+    }
+
+    if (filterJenis) {
+        filterJenis.addEventListener("change", tampilkanKatalog);
+    }
+}
+
+function tampilkanKatalog() {
+    const tabel = document.getElementById("tabelBuku");
+    const jumlahHasil = document.getElementById("jumlahHasil");
+
+    if (!tabel) return;
+
+    const kolomCari = document.getElementById("cariBuku");
+    const filterJenis = document.getElementById("filterJenis");
+
+    const kataKunci = kolomCari
+        ? kolomCari.value.trim().toLowerCase()
+        : "";
+
+    const jenisTerpilih = filterJenis
+        ? filterJenis.value
+        : "";
+
+    const hasil = daftarBahanAjar.filter(function (buku) {
+        const cocokKataKunci =
+            String(buku.kodeBarang || "").toLowerCase().includes(kataKunci) ||
+            String(buku.namaBarang || "").toLowerCase().includes(kataKunci) ||
+            String(buku.kodeLokasi || "").toLowerCase().includes(kataKunci);
+
+        const cocokJenis =
+            jenisTerpilih === "" ||
+            buku.jenisBarang === jenisTerpilih;
+
+        return cocokKataKunci && cocokJenis;
+    });
 
     if (jumlahHasil) {
         jumlahHasil.textContent =
-            "Menampilkan " + daftar.length + " bahan ajar";
+            hasil.length + " bahan ajar ditemukan";
     }
 
-    if (daftar.length === 0) {
-        tabelBuku.innerHTML = `
+    if (hasil.length === 0) {
+        tabel.innerHTML = `
             <tr>
-                <td colspan="7" style="text-align:center; padding:25px;">
-                    Data bahan ajar tidak ditemukan.
+                <td colspan="7" class="empty-state">
+                    Tidak ada bahan ajar yang sesuai.
                 </td>
             </tr>
         `;
         return;
     }
 
-    tabelBuku.innerHTML = daftar.map(function (buku) {
-        var statusStok = "";
+    tabel.innerHTML = hasil.map(function (buku) {
+        let statusStok = "Tersedia";
+        let kelasStatus = "status";
 
         if (buku.stok <= 0) {
-            statusStok = '<span class="status empty">Habis</span>';
-        } else if (buku.stok < 200) {
-            statusStok = '<span class="status warning">Stok Terbatas</span>';
-        } else {
-            statusStok = '<span class="status">Tersedia</span>';
+            statusStok = "Stok Habis";
+            kelasStatus += " empty";
+        } else if (buku.stok <= 20) {
+            statusStok = "Stok Terbatas";
+            kelasStatus += " warning";
         }
 
         return `
             <tr>
+                <td>${escapeHTML(buku.kodeLokasi || "-")}</td>
                 <td>${escapeHTML(buku.kodeBarang)}</td>
                 <td>${escapeHTML(buku.namaBarang)}</td>
-                <td>${escapeHTML(buku.kodeLokasi)}</td>
-                <td>${escapeHTML(buku.jenisBarang)}</td>
-                <td>${escapeHTML(buku.edisi)}</td>
+                <td>${escapeHTML(buku.jenisBarang || "-")}</td>
+                <td>${escapeHTML(buku.edisi || "-")}</td>
                 <td>${Number(buku.stok).toLocaleString("id-ID")}</td>
-                <td>${statusStok}</td>
+                <td><span class="${kelasStatus}">${statusStok}</span></td>
             </tr>
         `;
     }).join("");
 }
 
-function inisialisasiPencarian() {
-    var inputCari = document.getElementById("cariBuku");
-    var filterJenis = document.getElementById("filterJenis");
+// ================================================
+// 8. PILIHAN BAHAN AJAR UNTUK PEMESANAN
+// ================================================
 
-    function prosesFilter() {
-        var kataKunci = inputCari
-            ? inputCari.value.trim().toLowerCase()
-            : "";
+function isiPilihanBuku() {
+    const pilihan = document.getElementById("pilihBuku");
 
-        var jenisDipilih = filterJenis
-            ? filterJenis.value
-            : "";
+    if (!pilihan) return;
 
-        var hasilFilter = dataBahanAjar.filter(function (buku) {
-            var cocokKata =
-                buku.namaBarang.toLowerCase().includes(kataKunci) ||
-                buku.kodeBarang.toLowerCase().includes(kataKunci) ||
-                buku.kodeLokasi.toLowerCase().includes(kataKunci);
+    const nilaiSebelumnya = pilihan.value;
 
-            var cocokJenis =
-                !jenisDipilih ||
-                jenisDipilih === "Semua" ||
-                buku.jenisBarang === jenisDipilih;
+    pilihan.innerHTML = '<option value="">-- Pilih bahan ajar --</option>';
 
-            return cocokKata && cocokJenis;
-        });
+    daftarBahanAjar.forEach(function (buku) {
+        const opsi = document.createElement("option");
 
-        tampilkanKatalog(hasilFilter);
-    }
+        opsi.value = buku.kodeBarang;
+        opsi.textContent =
+            buku.kodeBarang + " - " + buku.namaBarang +
+            " (Stok: " + buku.stok + ")";
 
-    if (inputCari) {
-        inputCari.addEventListener("input", prosesFilter);
-    }
+        if (buku.stok <= 0) {
+            opsi.disabled = true;
+        }
 
-    if (filterJenis) {
-        filterJenis.addEventListener("change", prosesFilter);
+        pilihan.appendChild(opsi);
+    });
+
+    if (
+        nilaiSebelumnya &&
+        daftarBahanAjar.some(function (buku) {
+            return buku.kodeBarang === nilaiSebelumnya && buku.stok > 0;
+        })
+    ) {
+        pilihan.value = nilaiSebelumnya;
     }
 }
 
-// ============================================
-// 5. TRACKING PENGIRIMAN
-// ============================================
+// ================================================
+// 9. TRACKING PENGIRIMAN
+// ================================================
 
-function inisialisasiTracking() {
-    var formTracking = document.getElementById("formTracking");
+function pasangFormTracking() {
+    const form = document.getElementById("formTracking");
 
-    if (!formTracking) {
-        return;
-    }
+    if (!form) return;
 
-    formTracking.addEventListener("submit", function (event) {
+    form.addEventListener("submit", async function (event) {
         event.preventDefault();
+        sembunyikanNotifikasi();
 
-        var inputNomorDO = document.getElementById("nomorDO");
-        var nomorDO = inputNomorDO.value.trim();
-        var hasilTracking = document.getElementById("hasilTracking");
+        const inputNomor = document.getElementById("nomorDO");
+        const hasil = document.getElementById("hasilTracking");
+
+        const nomorDO = inputNomor
+            ? inputNomor.value.trim()
+            : "";
 
         if (!nomorDO) {
-            tampilkanHasilTracking(
-                "Masukkan nomor DO terlebih dahulu.",
-                true
+            tampilkanNotifikasi(
+                "Masukkan nomor delivery order (DO) terlebih dahulu.",
+                "error"
             );
             return;
         }
 
-        var data = dataTracking[nomorDO];
-
-        if (!data) {
-            tampilkanHasilTracking(
-                "Nomor DO " + nomorDO +
-                " tidak ditemukan. Periksa kembali nomor yang dimasukkan.",
-                true
+        if (!sittaDB) {
+            tampilkanNotifikasi(
+                "Database belum terhubung. Tracking belum dapat dilakukan.",
+                "error"
             );
             return;
         }
 
-        var daftarPerjalanan = data.perjalanan.map(function (item) {
-            return `
-                <div class="timeline-item">
-                    <strong>${escapeHTML(item.keterangan)}</strong>
-                    <small>${escapeHTML(item.waktu)}</small>
-                </div>
-            `;
-        }).join("");
+        if (hasil) {
+            hasil.innerHTML =
+                '<p class="loading-state">Memeriksa data pengiriman...</p>';
+        }
 
-        hasilTracking.innerHTML = `
-            <div class="result-card">
-                <h3>Informasi Pengiriman</h3>
-                <p><strong>Nomor DO:</strong> ${escapeHTML(data.nomorDO)}</p>
-                <p><strong>Nama penerima:</strong> ${escapeHTML(data.nama)}</p>
-                <p><strong>Ekspedisi:</strong> ${escapeHTML(data.ekspedisi)}</p>
-                <p><strong>Tanggal kirim:</strong> ${escapeHTML(data.tanggalKirim)}</p>
-                <p><strong>Kode paket:</strong> ${escapeHTML(data.paket)}</p>
-                <p><strong>Total:</strong> ${escapeHTML(data.total)}</p>
-                <p>
-                    <strong>Status:</strong>
-                    <span class="status">${escapeHTML(data.status)}</span>
-                </p>
-                <h3>Riwayat Perjalanan</h3>
-                <div class="timeline">${daftarPerjalanan}</div>
-                <p class="muted">
-                    Informasi ini menggunakan data simulasi praktikum.
-                </p>
-            </div>
-        `;
+        const { data: dataTracking, error: errorTracking } = await sittaDB
+            .from("tracking")
+            .select("*")
+            .eq("nomor_do", nomorDO)
+            .maybeSingle();
 
-        hasilTracking.style.display = "block";
+        if (errorTracking) {
+            console.error("Kesalahan pencarian tracking:", errorTracking);
+
+            if (hasil) {
+                hasil.innerHTML =
+                    '<p class="error-message">Data tracking gagal diambil. Periksa konfigurasi tabel dan akses Supabase.</p>';
+            }
+            return;
+        }
+
+        if (!dataTracking) {
+            if (hasil) {
+                hasil.innerHTML = `
+                    <div class="result-card">
+                        <h3>Data tidak ditemukan</h3>
+                        <p>Nomor DO <strong>${escapeHTML(nomorDO)}</strong> tidak ditemukan dalam database.</p>
+                    </div>
+                `;
+            }
+            return;
+        }
+
+        const { data: riwayat, error: errorRiwayat } = await sittaDB
+            .from("tracking_detail")
+            .select("*")
+            .eq("nomor_do", nomorDO)
+            .order("waktu", { ascending: true });
+
+        if (errorRiwayat) {
+            console.error("Kesalahan riwayat tracking:", errorRiwayat);
+
+            if (hasil) {
+                hasil.innerHTML =
+                    '<p class="error-message">Data pengiriman ditemukan, tetapi riwayat perjalanan gagal dimuat.</p>';
+            }
+            return;
+        }
+
+        tampilkanHasilTracking(dataTracking, riwayat || [], hasil);
     });
 }
 
-function tampilkanHasilTracking(pesan, terjadiKesalahan) {
-    var hasil = document.getElementById("hasilTracking");
+function tampilkanHasilTracking(data, riwayat, elemenHasil) {
+    if (!elemenHasil) return;
 
-    if (!hasil) {
-        return;
+    const tanggal = data.tanggal_kirim
+        ? formatTanggal(data.tanggal_kirim)
+        : "-";
+
+    let daftarRiwayat = "";
+
+    if (riwayat.length > 0) {
+        daftarRiwayat = riwayat.map(function (item) {
+            return `
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <strong>${escapeHTML(formatTanggalWaktu(item.waktu))}</strong>
+                        <p>${escapeHTML(item.keterangan)}</p>
+                    </div>
+                </div>
+            `;
+        }).join("");
+    } else {
+        daftarRiwayat =
+            '<p class="empty-state">Belum ada riwayat perjalanan untuk nomor DO ini.</p>';
     }
 
-    var kelas = terjadiKesalahan
-        ? "error-message"
-        : "success-message";
+    elemenHasil.innerHTML = `
+        <div class="result-card">
+            <h3>Informasi Pengiriman</h3>
 
-    hasil.innerHTML = `
-        <div class="${kelas}">${escapeHTML(pesan)}</div>
+            <div class="result-grid">
+                <div>
+                    <span>Nomor DO</span>
+                    <strong>${escapeHTML(data.nomor_do)}</strong>
+                </div>
+                <div>
+                    <span>Nama Penerima</span>
+                    <strong>${escapeHTML(data.nama)}</strong>
+                </div>
+                <div>
+                    <span>Status</span>
+                    <strong>${escapeHTML(data.status)}</strong>
+                </div>
+                <div>
+                    <span>Ekspedisi</span>
+                    <strong>${escapeHTML(data.ekspedisi)}</strong>
+                </div>
+                <div>
+                    <span>Tanggal Kirim</span>
+                    <strong>${escapeHTML(tanggal)}</strong>
+                </div>
+                <div>
+                    <span>Kode Paket</span>
+                    <strong>${escapeHTML(data.paket || "-")}</strong>
+                </div>
+                <div>
+                    <span>Total</span>
+                    <strong>${escapeHTML(data.total || "-")}</strong>
+                </div>
+            </div>
+
+            <h3>Riwayat Perjalanan</h3>
+            <div class="timeline">${daftarRiwayat}</div>
+        </div>
     `;
-
-    hasil.style.display = "block";
 }
 
-// ============================================
-// 6. FORMULIR PEMESANAN
-// ============================================
+// ================================================
+// 10. FORM PEMESANAN
+// ================================================
 
-function inisialisasiPemesanan() {
-    var formPemesanan = document.getElementById("formPemesanan");
-    var pilihBukuSelect = document.getElementById("pilihBuku");
+function pasangFormPemesanan() {
+    const form = document.getElementById("formPemesanan");
 
-    if (pilihBukuSelect) {
-        pilihBukuSelect.innerHTML =
-            '<option value="">-- Pilih bahan ajar --</option>' +
-            dataBahanAjar.map(function (buku) {
-                return `
-                    <option value="${escapeHTML(buku.kodeBarang)}">
-                        ${escapeHTML(buku.kodeBarang)} - ${escapeHTML(buku.namaBarang)}
-                        (Stok: ${Number(buku.stok)})
-                    </option>
-                `;
-            }).join("");
-    }
+    if (!form) return;
 
-    if (!formPemesanan) {
-        return;
-    }
-
-    formPemesanan.addEventListener("submit", function (event) {
+    form.addEventListener("submit", async function (event) {
         event.preventDefault();
+        sembunyikanNotifikasi();
 
-        var nama = document.getElementById("namaPemesan").value.trim();
-        var email = document.getElementById("emailPemesan").value.trim();
-        var kodeBuku = document.getElementById("pilihBuku").value;
-        var jumlah = Number(document.getElementById("jumlahBuku").value);
-        var catatan = document.getElementById("catatan").value.trim();
-        var hasil = document.getElementById("hasilPemesanan");
+        const nama = document.getElementById("namaPemesan").value.trim();
+        const email = document.getElementById("emailPemesan").value.trim();
+        const kodeBarang = document.getElementById("pilihBuku").value;
+        const jumlah = Number(document.getElementById("jumlahBuku").value);
+        const catatan = document.getElementById("catatan").value.trim();
+        const hasil = document.getElementById("hasilPemesanan");
 
-        if (!nama || !email || !kodeBuku || !jumlah) {
-            tampilkanHasilPemesanan(
-                "Lengkapi nama, email, bahan ajar, dan jumlah pesanan.",
-                true
+        if (!nama || !email || !kodeBarang || !Number.isInteger(jumlah) || jumlah < 1) {
+            tampilkanNotifikasi(
+                "Lengkapi nama, email, bahan ajar, dan jumlah pesanan dengan benar.",
+                "error"
             );
             return;
         }
 
-        var polaEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (!polaEmail.test(email)) {
-            tampilkanHasilPemesanan(
-                "Format email belum benar. Periksa kembali email Anda.",
-                true
-            );
-            return;
-        }
-
-        if (!Number.isInteger(jumlah) || jumlah < 1) {
-            tampilkanHasilPemesanan(
-                "Jumlah pesanan harus berupa bilangan bulat minimal 1.",
-                true
-            );
-            return;
-        }
-
-        var bukuDipilih = dataBahanAjar.find(function (buku) {
-            return buku.kodeBarang === kodeBuku;
+        const bukuDipilih = daftarBahanAjar.find(function (buku) {
+            return buku.kodeBarang === kodeBarang;
         });
 
         if (!bukuDipilih) {
-            tampilkanHasilPemesanan(
-                "Bahan ajar yang dipilih tidak ditemukan.",
-                true
+            tampilkanNotifikasi(
+                "Bahan ajar yang dipilih tidak ditemukan. Muat ulang katalog dan coba kembali.",
+                "error"
             );
             return;
         }
 
         if (jumlah > bukuDipilih.stok) {
-            tampilkanHasilPemesanan(
-                "Jumlah pesanan melebihi stok yang tersedia (" +
-                bukuDipilih.stok + ").",
-                true
+            tampilkanNotifikasi(
+                "Jumlah pesanan melebihi stok yang tersedia.",
+                "error"
             );
             return;
         }
 
-        // Nomor pesanan simulasi untuk keperluan praktikum.
-        var nomorPesanan = "ORD-" + Date.now().toString().slice(-8);
+        if (!sittaDB) {
+            tampilkanNotifikasi(
+                "Database belum terhubung. Pesanan belum dapat disimpan.",
+                "error"
+            );
+            return;
+        }
 
-        hasil.innerHTML = `
-            <div class="success-message">
-                <h3>Pesanan Berhasil Dicatat!</h3>
-                <p><strong>Nomor pesanan:</strong> ${nomorPesanan}</p>
-                <p><strong>Nama pemesan:</strong> ${escapeHTML(nama)}</p>
-                <p><strong>Email:</strong> ${escapeHTML(email)}</p>
-                <p><strong>Kode bahan ajar:</strong> ${escapeHTML(bukuDipilih.kodeBarang)}</p>
-                <p><strong>Nama bahan ajar:</strong> ${escapeHTML(bukuDipilih.namaBarang)}</p>
-                <p><strong>Jumlah:</strong> ${jumlah}</p>
-                <p><strong>Catatan:</strong> ${escapeHTML(catatan || "-")}</p>
-                <p class="muted">
-                    Ini adalah simulasi pemesanan. Data belum dikirim ke server
-                    dan stok katalog belum dikurangi.
-                </p>
-            </div>
-        `;
+        const tombolKirim = form.querySelector('[type="submit"]');
 
-        hasil.style.display = "block";
-        tampilkanNotifikasi("Simulasi pesanan berhasil dibuat.");
-        formPemesanan.reset();
+        if (tombolKirim) {
+            tombolKirim.disabled = true;
+            tombolKirim.textContent = "Menyimpan...";
+        }
+
+        try {
+            const nomorPesanan = buatNomorPesanan();
+
+            const { error } = await sittaDB
+                .from("pemesanan")
+                .insert({
+                    nomor_pesanan: nomorPesanan,
+                    nama_pemesan: nama,
+                    email: email,
+                    kode_barang: kodeBarang,
+                    jumlah: jumlah,
+                    catatan: catatan || null
+                });
+
+            if (error) {
+                console.error("Gagal menyimpan pesanan:", error);
+
+                tampilkanNotifikasi(
+                    "Pesanan gagal disimpan. Pastikan tabel pemesanan dan kebijakan INSERT sudah dibuat di Supabase.",
+                    "error"
+                );
+
+                if (hasil) {
+                    hasil.innerHTML =
+                        '<p class="error-message">Pesanan belum tersimpan. Silakan periksa konfigurasi database lalu coba kembali.</p>';
+                }
+
+                return;
+            }
+
+            if (hasil) {
+                hasil.innerHTML = `
+                    <div class="result-card">
+                        <h3>Pesanan Berhasil Disimpan</h3>
+                        <p>Nomor pesanan: <strong>${escapeHTML(nomorPesanan)}</strong></p>
+                        <p>Nama pemesan: ${escapeHTML(nama)}</p>
+                        <p>Email: ${escapeHTML(email)}</p>
+                        <p>Bahan ajar: ${escapeHTML(bukuDipilih.namaBarang)}</p>
+                        <p>Jumlah: ${jumlah}</p>
+                        <p>Catatan: ${escapeHTML(catatan || "-")}</p>
+                        <p class="success-message">
+                            Data pesanan telah tersimpan di database.
+                        </p>
+                    </div>
+                `;
+            }
+
+            tampilkanNotifikasi(
+                "Pesanan berhasil disimpan ke database.",
+                "success"
+            );
+
+            form.reset();
+            isiPilihanBuku();
+        } finally {
+            if (tombolKirim) {
+                tombolKirim.disabled = false;
+                tombolKirim.textContent = "Kirim Pesanan";
+            }
+        }
     });
 }
 
-function pilihBuku(kodeBarang) {
-    var selectBuku = document.getElementById("pilihBuku");
+function buatNomorPesanan() {
+    const waktu = Date.now().toString();
+    const angkaAcak = Math.floor(1000 + Math.random() * 9000);
 
-    if (!selectBuku) {
-        return;
-    }
-
-    selectBuku.value = kodeBarang;
-    bukaHalaman("pemesanan");
-    tampilkanNotifikasi("Bahan ajar dipilih. Lengkapi formulir pemesanan.");
+    return "SITTA-" + waktu + "-" + angkaAcak;
 }
 
-// ============================================
-// 7. NOTIFIKASI
-// ============================================
+// ================================================
+// 11. FORMAT TANGGAL
+// ================================================
 
-function tampilkanNotifikasi(pesan) {
-    var notifikasi = document.getElementById("notifikasi");
+function formatTanggal(nilai) {
+    if (!nilai) return "-";
 
-    if (!notifikasi) {
-        return;
+    const tanggal = new Date(nilai + "T00:00:00");
+
+    if (Number.isNaN(tanggal.getTime())) {
+        return String(nilai);
     }
 
-    notifikasi.textContent = pesan;
-    notifikasi.style.display = "block";
-
-    // Menyembunyikan notifikasi setelah 3 detik.
-    window.setTimeout(function () {
-        notifikasi.style.display = "none";
-    }, 3000);
+    return tanggal.toLocaleDateString("id-ID", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric"
+    });
 }
 
-function tampilkanHasilPemesanan(pesan, terjadiKesalahan) {
-    var hasil = document.getElementById("hasilPemesanan");
+function formatTanggalWaktu(nilai) {
+    if (!nilai) return "-";
 
-    if (!hasil) {
-        return;
+    const tanggal = new Date(nilai);
+
+    if (Number.isNaN(tanggal.getTime())) {
+        return String(nilai);
     }
 
-    hasil.innerHTML = `
-        <div class="${terjadiKesalahan ? "error-message" : "success-message"}">
-            ${escapeHTML(pesan)}
-        </div>
-    `;
-
-    hasil.style.display = "block";
+    return tanggal.toLocaleString("id-ID", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+    });
 }
 
-// ============================================
-// 8. KEAMANAN DASAR TAMPILAN
-// Mencegah teks input diperlakukan sebagai HTML
-// ============================================
+// ================================================
+// 12. KEAMANAN TAMPILAN HTML
+// ================================================
 
 function escapeHTML(nilai) {
-    return String(nilai == null ? "" : nilai).replace(/[&<>"']/g, function (karakter) {
-        var pengganti = {
+    return String(nilai ?? "").replace(/[&<>"']/g, function (karakter) {
+        const pengganti = {
             "&": "&amp;",
             "<": "&lt;",
             ">": "&gt;",
             '"': "&quot;",
-            "'": "&#39;"
+            "'": "&#039;"
         };
 
         return pengganti[karakter];
