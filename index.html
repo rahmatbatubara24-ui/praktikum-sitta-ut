@@ -5,38 +5,406 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>SITTA - Sistem Informasi Tata Bahan Ajar</title>
-    <meta name="description" content="Sistem Informasi Tata Bahan Ajar Universitas Terbuka">
+    <!-- Arahkan pengguna ke login jika belum masuk -->
+    <script>
+        if (!sessionStorage.getItem("sittaPenggunaAktif")) {
+            window.location.replace("login.html");
+        }
+    </script>
 
-    <link rel="stylesheet" href="style.css">
+    <title>SITTA - Sistem Informasi Tata Bahan Ajar</title>
 
     <style>
-        /* Perbaikan navigasi dan tampilan halaman */
+        :root {
+            --primary: #0b5cab;
+            --primary-dark: #083d73;
+            --secondary: #147d92;
+            --background: #f3f6fb;
+            --text: #243247;
+            --muted: #667085;
+            --white: #ffffff;
+            --border: #e4e9f0;
+            --success: #16845b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--background);
+            color: var(--text);
+        }
+
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 18px;
+            padding: 16px 5%;
+            background: var(--white);
+            box-shadow: 0 3px 12px rgba(15, 35, 65, 0.08);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            background: var(--primary);
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .brand h1 {
+            color: var(--primary-dark);
+            font-size: 22px;
+        }
+
+        .brand p {
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .nav-btn {
+            padding: 10px 14px;
+            border: none;
+            border-radius: 8px;
+            background: transparent;
+            color: #475467;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .nav-btn:hover,
+        .nav-btn.active {
+            background: #e9f2ff;
+            color: var(--primary);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 28px 20px 45px;
+        }
+
         .page {
             display: none;
         }
 
         .page.active {
             display: block;
-            animation: sittaFade 0.25s ease;
         }
 
-        nav .nav-btn {
+        .hero {
+            position: relative;
+            overflow: hidden;
+            padding: 38px;
+            border-radius: 18px;
+            background: linear-gradient(120deg, #0b3b75, #147d92);
+            color: white;
+        }
+
+        .hero h2 {
+            margin-bottom: 12px;
+            font-size: 30px;
+            line-height: 1.3;
+        }
+
+        .hero p {
+            max-width: 650px;
+            color: #e4efff;
+            line-height: 1.8;
+        }
+
+        .hero button {
+            margin-top: 22px;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 8px;
+            background: white;
+            color: var(--primary-dark);
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .section-title {
+            margin: 28px 0 16px;
+            color: var(--primary-dark);
+            font-size: 22px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin-top: 24px;
+        }
+
+        .stat-card,
+        .panel,
+        .menu-card {
+            padding: 22px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: var(--white);
+            box-shadow: 0 4px 14px rgba(15, 35, 65, 0.04);
+        }
+
+        .stat-card p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .stat-card h3 {
+            margin-top: 12px;
+            color: var(--primary);
+            font-size: 28px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .menu-card h3 {
+            margin-bottom: 9px;
+            color: var(--primary-dark);
+            font-size: 17px;
+        }
+
+        .menu-card p {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .menu-card button {
+            margin-top: 15px;
+            padding: 10px 14px;
+            border: none;
+            border-radius: 8px;
+            background: var(--primary);
+            color: white;
             cursor: pointer;
         }
 
-        #notifikasi:not([hidden]) {
-            display: block;
+        .panel {
+            margin-top: 20px;
         }
 
-        @keyframes sittaFade {
-            from {
-                opacity: 0;
-                transform: translateY(5px);
+        .panel h3 {
+            margin-bottom: 18px;
+            color: var(--primary-dark);
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #344054;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid #d0d5dd;
+            border-radius: 8px;
+            outline: none;
+            background: white;
+            font-size: 14px;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(20, 125, 146, 0.1);
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .primary-button {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 8px;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .primary-button:hover {
+            background: var(--primary-dark);
+        }
+
+        .secondary-button {
+            padding: 10px 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: white;
+            color: var(--primary);
+            cursor: pointer;
+        }
+
+        .catalog-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin-top: 20px;
+        }
+
+        .book-card {
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: white;
+        }
+
+        .book-cover {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 130px;
+            padding: 20px;
+            background: #eaf2fc;
+            color: var(--primary);
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .book-info {
+            padding: 18px;
+        }
+
+        .book-info h3 {
+            margin-bottom: 10px;
+            color: var(--primary-dark);
+            font-size: 16px;
+        }
+
+        .book-info p {
+            margin-bottom: 7px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .book-info button {
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 18px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: #f8fafc;
+            line-height: 1.8;
+            overflow-wrap: anywhere;
+        }
+
+        .result-box:empty {
+            display: none;
+        }
+
+        .footer {
+            padding: 22px 15px;
+            background: white;
+            color: var(--muted);
+            text-align: center;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        .footer strong {
+            color: var(--primary);
+        }
+
+        .logout-button {
+            padding: 10px 14px;
+            border: 1px solid #f0caca;
+            border-radius: 8px;
+            background: #fff4f4;
+            color: #b42318;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 850px) {
+            .header {
+                align-items: flex-start;
+                flex-direction: column;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+
+            .stats-grid,
+            .menu-grid,
+            .catalog-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 550px) {
+            .hero {
+                padding: 25px;
+            }
+
+            .hero h2 {
+                font-size: 24px;
+            }
+
+            .stats-grid,
+            .menu-grid,
+            .catalog-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-menu {
+                width: 100%;
+            }
+
+            .nav-btn {
+                padding: 9px;
             }
         }
     </style>
@@ -44,273 +412,377 @@
 
 <body>
 
-<header class="header">
-    <div class="logo">
-        <div class="logo-icon">UT</div>
-        <div>
-            <h2>SITTA</h2>
-            <p>Sistem Informasi Tata Bahan Ajar</p>
-        </div>
-    </div>
-
-    <nav aria-label="Navigasi utama">
-        <button type="button" class="nav-btn active"
-            data-page="dashboard"
-            onclick="if(window.bukaHalaman){window.bukaHalaman('dashboard')}else{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('dashboard').classList.add('active')}">
-            Dashboard
-        </button>
-
-        <button type="button" class="nav-btn"
-            data-page="katalog"
-            onclick="if(window.bukaHalaman){window.bukaHalaman('katalog')}else{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('katalog').classList.add('active')}">
-            Katalog Bahan Ajar
-        </button>
-
-        <button type="button" class="nav-btn"
-            data-page="tracking"
-            onclick="if(window.bukaHalaman){window.bukaHalaman('tracking')}else{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('tracking').classList.add('active')}">
-            Tracking
-        </button>
-
-        <button type="button" class="nav-btn"
-            data-page="pemesanan"
-            onclick="if(window.bukaHalaman){window.bukaHalaman('pemesanan')}else{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('pemesanan').classList.add('active')}">
-            Pemesanan
-        </button>
-    </nav>
-</header>
-
-<main class="container">
-
-    <!-- DASHBOARD -->
-    <section id="dashboard" class="page active">
-        <div class="welcome">
-            <span class="badge">SISTEM INFORMASI UNIVERSITAS TERBUKA</span>
-            <h1>Selamat Datang di SITTA BY SUMARDI HUTABARAT</h1>
-            <p>Kelola informasi bahan ajar dan pantau pengiriman dalam satu aplikasi.</p>
-        </div>
-
-        <div class="hero">
+    <header class="header">
+        <div class="brand">
+            <div class="brand-logo">UT</div>
             <div>
-                <h2>Layanan Bahan Ajar Universitas Terbuka</h2>
+                <h1>SITTA</h1>
+                <p>Sistem Informasi Tata Bahan Ajar</p>
+            </div>
+        </div>
+
+        <nav class="nav-menu" aria-label="Navigasi utama">
+            <button class="nav-btn active" data-page="dashboard">Dashboard</button>
+            <button class="nav-btn" data-page="katalog">Katalog</button>
+            <button class="nav-btn" data-page="tracking">Tracking</button>
+            <button class="nav-btn" data-page="pemesanan">Pemesanan</button>
+            <button class="logout-button" id="tombolLogout">Keluar</button>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <!-- HALAMAN DASHBOARD -->
+        <section class="page active" id="dashboard">
+            <div class="hero">
+                <h2 id="sapaanDashboard">Selamat Datang di SITTA</h2>
                 <p>
-                    Temukan bahan ajar, periksa ketersediaan stok,
-                    dan lihat informasi pengiriman dengan mudah.
+                    Kelola informasi bahan ajar, lihat ketersediaan stok,
+                    lakukan pemesanan, dan periksa status pengiriman
+                    bahan ajar melalui satu aplikasi.
                 </p>
-                <button type="button" class="primary-btn"
-                    onclick="if(window.bukaHalaman){window.bukaHalaman('katalog')}else{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('katalog').classList.add('active')}">
-                    Lihat Katalog
+                <button type="button" onclick="window.bukaHalaman('katalog')">
+                    Lihat Katalog Bahan Ajar
                 </button>
             </div>
-            <div class="hero-icon">📚</div>
-        </div>
 
-        <div class="stats">
-            <div class="stat-card">
-                <span>📚</span>
-                <p>Jenis Bahan Ajar</p>
-                <h2 id="totalBuku">0</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <p>Jenis Bahan Ajar</p>
+                    <h3 id="totalBahanAjar">0</h3>
+                </div>
+
+                <div class="stat-card">
+                    <p>Total Stok</p>
+                    <h3 id="totalStok">0</h3>
+                </div>
+
+                <div class="stat-card">
+                    <p>Total Pesanan Sesi Ini</p>
+                    <h3 id="totalPesanan">0</h3>
+                </div>
             </div>
-            <div class="stat-card">
-                <span>📦</span>
-                <p>Total Stok</p>
-                <h2 id="totalStok">0</h2>
-            </div>
-            <div class="stat-card">
-                <span>🚚</span>
-                <p>Data Pengiriman</p>
-                <h2 id="totalTracking">0</h2>
-            </div>
-        </div>
 
-        <h2 class="section-title">Bahan Ajar Tersedia</h2>
-        <div id="bukuPilihan" class="book-grid">
-            <p class="muted">Memuat data bahan ajar...</p>
-        </div>
-    </section>
+            <h2 class="section-title">Menu SITTA</h2>
 
-    <!-- KATALOG -->
-    <section id="katalog" class="page">
-        <div class="page-heading">
-            <span class="badge">DATA BAHAN AJAR</span>
-            <h1>Katalog Bahan Ajar</h1>
-            <p>Cari bahan ajar berdasarkan nama, kode barang, atau penulis.</p>
-        </div>
-
-        <div class="toolbar">
-            <input type="search" id="cariBuku"
-                placeholder="Cari nama atau kode bahan ajar..."
-                aria-label="Cari bahan ajar">
-
-            <select id="filterJenis" aria-label="Filter jenis bahan ajar">
-                <option value="">Semua jenis</option>
-                <option value="BMP">BMP</option>
-                <option value="Suplemen">Suplemen</option>
-                <option value="Modul">Modul</option>
-            </select>
-        </div>
-
-        <p id="jumlahHasil" class="muted">Memuat data...</p>
-
-        <div class="table-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Kode Bahan Ajar</th>
-                        <th>Nama Bahan Ajar</th>
-                        <th>Penulis</th>
-                        <th>Harga</th>
-                        <th>Stok</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="tabelBuku">
-                    <tr>
-                        <td colspan="7">Memuat data bahan ajar...</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
-
-    <!-- TRACKING -->
-    <section id="tracking" class="page">
-        <div class="page-heading">
-            <span class="badge">PELACAKAN PESANAN</span>
-            <h1>Tracking Bahan Ajar</h1>
-            <p>Masukkan nomor pesanan untuk memeriksa statusnya.</p>
-        </div>
-
-        <div class="panel">
-            <form id="formTracking">
-                <label for="nomorDO">Nomor Pesanan</label>
-                <div class="input-row">
-                    <input type="text" id="nomorDO"
-                        placeholder="Masukkan nomor pesanan"
-                        required>
-                    <button type="submit" class="primary-btn">
-                        Periksa Status
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <h3>Informasi Bahan Ajar</h3>
+                    <p>Lihat informasi dan daftar bahan ajar yang tersedia.</p>
+                    <button type="button" onclick="window.bukaHalaman('katalog')">
+                        Buka Katalog
                     </button>
                 </div>
-                <small>Gunakan nomor pesanan yang diperoleh setelah pemesanan berhasil.</small>
-            </form>
-        </div>
 
-        <div id="hasilTracking"></div>
-    </section>
+                <div class="menu-card">
+                    <h3>Tracking Pengiriman</h3>
+                    <p>Periksa status pengiriman menggunakan nomor Delivery Order.</p>
+                    <button type="button" onclick="window.bukaHalaman('tracking')">
+                        Lacak Pengiriman
+                    </button>
+                </div>
 
-    <!-- PEMESANAN -->
-    <section id="pemesanan" class="page">
-        <div class="page-heading">
-            <span class="badge">LAYANAN PEMESANAN</span>
-            <h1>Pemesanan Bahan Ajar</h1>
-            <p>Isi formulir berikut untuk mencatat pesanan bahan ajar.</p>
-        </div>
+                <div class="menu-card">
+                    <h3>Laporan dan Pemesanan</h3>
+                    <p>Masukkan data pemesanan bahan ajar melalui formulir aplikasi.</p>
+                    <button type="button" onclick="window.bukaHalaman('pemesanan')">
+                        Buka Pemesanan
+                    </button>
+                </div>
+            </div>
+        </section>
 
-        <div class="panel">
-            <form id="formPemesanan">
-                <div class="form-grid">
-                    <div>
+        <!-- HALAMAN KATALOG -->
+        <section class="page" id="katalog">
+            <h2 class="section-title">Informasi Bahan Ajar</h2>
+
+            <div class="panel">
+                <div class="form-group">
+                    <label for="pencarianBahanAjar">Cari Bahan Ajar</label>
+                    <input
+                        type="search"
+                        id="pencarianBahanAjar"
+                        placeholder="Cari berdasarkan kode atau nama bahan ajar..."
+                    >
+                </div>
+
+                <p style="color:#667085;font-size:13px;line-height:1.7">
+                    Daftar bahan ajar ditampilkan berdasarkan data pada
+                    file data.js.
+                </p>
+            </div>
+
+            <div id="daftarKatalog" class="catalog-grid"></div>
+        </section>
+
+        <!-- HALAMAN TRACKING -->
+        <section class="page" id="tracking">
+            <h2 class="section-title">Tracking Pengiriman Bahan Ajar</h2>
+
+            <div class="panel">
+                <h3>Periksa Status Delivery Order</h3>
+
+                <form id="formTracking">
+                    <div class="form-group">
+                        <label for="nomorDO">Nomor Delivery Order (DO)</label>
+                        <input
+                            type="text"
+                            id="nomorDO"
+                            placeholder="Masukkan nomor DO"
+                            required
+                        >
+                    </div>
+
+                    <button type="submit" class="primary-button">
+                        Lacak Pengiriman
+                    </button>
+                </form>
+
+                <div id="hasilTracking" class="result-box" aria-live="polite"></div>
+            </div>
+        </section>
+
+        <!-- HALAMAN PEMESANAN -->
+        <section class="page" id="pemesanan">
+            <h2 class="section-title">Pemesanan Bahan Ajar</h2>
+
+            <div class="panel">
+                <h3>Formulir Pemesanan</h3>
+
+                <form id="formPemesanan">
+                    <div class="form-group">
                         <label for="namaPemesan">Nama Pemesan</label>
-                        <input type="text" id="namaPemesan"
-                            maxlength="100"
+                        <input
+                            type="text"
+                            id="namaPemesan"
                             placeholder="Masukkan nama lengkap"
-                            required>
+                            required
+                        >
                     </div>
 
-                    <div>
+                    <div class="form-group">
                         <label for="emailPemesan">Email</label>
-                        <input type="email" id="emailPemesan"
-                            maxlength="254"
+                        <input
+                            type="email"
+                            id="emailPemesan"
                             placeholder="nama@email.com"
-                            required>
+                            required
+                        >
                     </div>
 
-                    <div>
-                        <label for="pilihBuku">Bahan Ajar</label>
+                    <div class="form-group">
+                        <label for="pilihBuku">Pilih Bahan Ajar</label>
                         <select id="pilihBuku" required>
-                            <option value="">Memuat bahan ajar...</option>
+                            <option value="">Pilih bahan ajar</option>
                         </select>
                     </div>
 
-                    <div>
-                        <label for="jumlahBuku">Jumlah Pesanan</label>
-                        <input type="number" id="jumlahBuku"
-                            min="1" step="1" value="1" required>
+                    <div class="form-group">
+                        <label for="jumlahBuku">Jumlah</label>
+                        <input
+                            type="number"
+                            id="jumlahBuku"
+                            min="1"
+                            value="1"
+                            required
+                        >
                     </div>
-                </div>
 
-                <label for="catatan">Catatan (opsional)</label>
-                <textarea id="catatan" rows="3" maxlength="500"
-                    placeholder="Tambahkan catatan jika diperlukan"></textarea>
+                    <div class="form-group">
+                        <label for="catatan">Catatan</label>
+                        <textarea
+                            id="catatan"
+                            placeholder="Catatan tambahan jika ada"
+                        ></textarea>
+                    </div>
 
-                <button type="submit" class="primary-btn">
-                    Simpan Pesanan
-                </button>
+                    <button type="submit" class="primary-button">
+                        Kirim Pesanan
+                    </button>
+                </form>
 
-                <button type="reset" class="secondary-btn">
-                    Reset Formulir
-                </button>
+                <div id="hasilPemesanan" class="result-box" aria-live="polite"></div>
+            </div>
+        </section>
 
-                <p class="muted">
-                    Pesanan dicatat pada database Supabase.
-                    Stok hanya dapat dikelola oleh petugas yang berwenang.
-                </p>
-            </form>
-        </div>
+    </main>
 
-        <div id="hasilPemesanan"></div>
-    </section>
+    <footer class="footer">
+        SITTA · Sistem Informasi Tata Bahan Ajar
+        <br>
+        Aplikasi dibuat oleh <strong>Sumardi Hutabarat</strong>
+    </footer>
 
-</main>
+    <!-- Data dan logika aplikasi tetap memakai file terpisah -->
+    <script src="data.js"></script>
+    <script src="script.js"></script>
 
-<div id="notifikasi" role="status" aria-live="polite" hidden></div>
+    <script>
+        // Navigasi antarmenu
+        window.bukaHalaman = function (namaHalaman) {
+            const halamanTujuan = document.getElementById(namaHalaman);
 
-<footer>
-    <strong>SITTA — Universitas Terbuka</strong>
-    <p>Sistem Informasi Tata Bahan Ajar | Aplikasi Praktikum STSI4209</p>
-</footer>
+            if (!halamanTujuan) {
+                return;
+            }
 
-<!-- Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+            document.querySelectorAll(".page").forEach(function (halaman) {
+                halaman.classList.remove("active");
+            });
 
-<!-- Konfigurasi Supabase yang digunakan saat ini -->
-<script>
-    window.sittaSupabaseConfig = {
-        url: "https://ajculvskijensjiessxf.supabase.co",
-        key: "sb_publishable_K8hQBBRW1rrbW5NgvqjJJA_bZ4xH2rZ"
-    };
-</script>
+            halamanTujuan.classList.add("active");
 
-<script src="data.js"></script>
-<script src="script.js"></script>
+            document.querySelectorAll(".nav-btn").forEach(function (tombol) {
+                tombol.classList.toggle(
+                    "active",
+                    tombol.dataset.page === namaHalaman
+                );
+            });
 
-<!-- Menjaga navigasi tetap dapat berpindah halaman -->
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        };
+
         document.querySelectorAll(".nav-btn").forEach(function (tombol) {
             tombol.addEventListener("click", function () {
-                var id = tombol.getAttribute("data-page");
-                var halaman = document.getElementById(id);
-
-                if (!halaman) return;
-
-                document.querySelectorAll(".page").forEach(function (item) {
-                    item.classList.remove("active");
-                });
-
-                halaman.classList.add("active");
-
-                document.querySelectorAll(".nav-btn").forEach(function (item) {
-                    item.classList.toggle("active", item === tombol);
-                });
-
-                window.scrollTo({ top: 0, behavior: "smooth" });
+                window.bukaHalaman(this.dataset.page);
             });
         });
-    });
-</script>
+
+        // Sapaan sesuai waktu lokal dan nama pengguna yang login
+        (function () {
+            const jam = new Date().getHours();
+            let sapaan = "Selamat Malam";
+
+            if (jam >= 4 && jam < 11) {
+                sapaan = "Selamat Pagi";
+            } else if (jam >= 11 && jam < 15) {
+                sapaan = "Selamat Siang";
+            } else if (jam >= 15 && jam < 18) {
+                sapaan = "Selamat Sore";
+            }
+
+            let nama = "";
+
+            try {
+                const pengguna = JSON.parse(
+                    sessionStorage.getItem("sittaPenggunaAktif") || "null"
+                );
+
+                if (pengguna && pengguna.nama) {
+                    nama = ", " + pengguna.nama;
+                }
+            } catch (error) {
+                nama = "";
+            }
+
+            document.getElementById("sapaanDashboard").textContent =
+                sapaan + nama + "!";
+        })();
+
+        // Keluar dari aplikasi dan kembali ke halaman login
+        document.getElementById("tombolLogout").addEventListener("click", function () {
+            sessionStorage.removeItem("sittaPenggunaAktif");
+            window.location.replace("login.html");
+        });
+
+        // Pencarian sederhana pada katalog
+        document.getElementById("pencarianBahanAjar")
+            .addEventListener("input", function () {
+                const kataKunci = this.value.trim().toLowerCase();
+
+                document.querySelectorAll("#daftarKatalog .book-card")
+                    .forEach(function (kartu) {
+                        kartu.style.display =
+                            kartu.textContent.toLowerCase().includes(kataKunci)
+                                ? ""
+                                : "none";
+                    });
+            });
+
+        // Tampilkan katalog berdasarkan dataBahanAjar dari data.js
+        (function () {
+            if (typeof dataBahanAjar === "undefined"
+                || !Array.isArray(dataBahanAjar)) {
+                document.getElementById("daftarKatalog").innerHTML =
+                    "<p>Data bahan ajar tidak ditemukan. Periksa file data.js.</p>";
+                return;
+            }
+
+            const daftarKatalog = document.getElementById("daftarKatalog");
+            const pilihanBuku = document.getElementById("pilihBuku");
+            let jumlahStok = 0;
+
+            dataBahanAjar.forEach(function (bahan, indeks) {
+                const stok = Number(bahan.stok) || 0;
+                jumlahStok += stok;
+
+                const kartu = document.createElement("article");
+                kartu.className = "book-card";
+
+                const sampul = document.createElement("div");
+                sampul.className = "book-cover";
+                sampul.textContent = bahan.namaBarang || "Bahan Ajar";
+
+                const info = document.createElement("div");
+                info.className = "book-info";
+
+                const judul = document.createElement("h3");
+                judul.textContent = bahan.namaBarang || "-";
+
+                const kode = document.createElement("p");
+                kode.textContent = "Kode: " + (bahan.kodeBarang || "-");
+
+                const lokasi = document.createElement("p");
+                lokasi.textContent = "Kode lokasi: " + (bahan.kodeLokasi || "-");
+
+                const jenis = document.createElement("p");
+                jenis.textContent = "Jenis: " + (bahan.jenisBarang || "-");
+
+                const edisi = document.createElement("p");
+                edisi.textContent = "Edisi: " + (bahan.edisi || "-");
+
+                const stokTeks = document.createElement("p");
+                stokTeks.textContent = "Stok tersedia: " + stok;
+
+                const tombol = document.createElement("button");
+                tombol.type = "button";
+                tombol.className = "primary-button";
+                tombol.textContent = "Pesan Bahan Ajar";
+                tombol.addEventListener("click", function () {
+                    pilihanBuku.value = String(indeks);
+                    window.bukaHalaman("pemesanan");
+                    pilihanBuku.focus();
+                });
+
+                info.append(judul, kode, lokasi, jenis, edisi, stokTeks, tombol);
+                kartu.append(sampul, info);
+                daftarKatalog.appendChild(kartu);
+
+                const opsi = document.createElement("option");
+                opsi.value = String(indeks);
+                opsi.textContent =
+                    (bahan.kodeBarang || "") + " - " +
+                    (bahan.namaBarang || "Bahan Ajar") +
+                    " (Stok: " + stok + ")";
+
+                pilihanBuku.appendChild(opsi);
+            });
+
+            document.getElementById("totalBahanAjar").textContent =
+                dataBahanAjar.length;
+
+            document.getElementById("totalStok").textContent =
+                jumlahStok.toLocaleString("id-ID");
+        })();
+
+        // Ringkasan jumlah pesanan selama sesi browser berlangsung
+        window.addEventListener("sittaPesananBerubah", function (event) {
+            document.getElementById("totalPesanan").textContent =
+                event.detail && Number.isFinite(event.detail.total)
+                    ? event.detail.total
+                    : document.getElementById("totalPesanan").textContent;
+        });
+    </script>
 
 </body>
 </html>
