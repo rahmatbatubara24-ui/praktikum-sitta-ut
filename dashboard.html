@@ -4,19 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard SITTA | Universitas Terbuka</title>
+    <title>Dashboard SITTA - Universitas Terbuka</title>
 
     <style>
         :root {
-            --primary: #174d83;
-            --primary-dark: #10365e;
-            --primary-light: #eaf3fc;
-            --background: #f3f6fb;
-            --text: #263548;
-            --muted: #64748b;
-            --border: #e2e8f0;
-            --white: #ffffff;
-            --success: #15803d;
+            --biru: #174d83;
+            --biru-gelap: #10365e;
+            --biru-muda: #eaf3fc;
+            --latar: #f3f6fb;
+            --teks: #263548;
+            --abu: #64748b;
+            --garis: #e2e8f0;
+            --putih: #ffffff;
         }
 
         * {
@@ -27,20 +26,19 @@
 
         body {
             font-family: Arial, Helvetica, sans-serif;
-            background: var(--background);
-            color: var(--text);
-            min-height: 100vh;
+            background: var(--latar);
+            color: var(--teks);
         }
 
-        /* HEADER */
-        .header {
-            background: var(--primary-dark);
+        header {
+            background: var(--biru-gelap);
             color: white;
-            padding: 17px 5%;
+            padding: 18px 5%;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            gap: 16px;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
         }
 
         .brand {
@@ -50,53 +48,51 @@
         }
 
         .brand-icon {
-            width: 45px;
-            height: 45px;
-            background: white;
-            color: var(--primary);
+            width: 48px;
+            height: 48px;
             border-radius: 10px;
+            background: white;
+            color: var(--biru);
             display: grid;
             place-items: center;
-            font-size: 25px;
+            font-size: 27px;
         }
 
         .brand h1 {
-            font-size: 22px;
+            font-size: 23px;
             margin-bottom: 5px;
         }
 
         .brand p {
-            color: #d8e7f7;
             font-size: 12px;
+            color: #dceafa;
         }
 
-        .header-actions {
+        .header-right {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
         }
 
-        .user-label {
-            font-size: 13px;
-            color: #e4edf8;
+        #headerUser {
+            font-size: 14px;
         }
 
-        .logout-button {
+        .logout {
             background: transparent;
-            color: white;
-            border: 1px solid #d8e7f7;
+            border: 1px solid white;
             border-radius: 7px;
+            color: white;
             padding: 10px 15px;
             cursor: pointer;
         }
 
-        .logout-button:hover {
+        .logout:hover {
             background: white;
-            color: var(--primary-dark);
+            color: var(--biru-gelap);
         }
 
-        /* KONTEN */
-        .container {
+        main {
             max-width: 1200px;
             margin: 28px auto;
             padding: 0 22px 40px;
@@ -109,7 +105,7 @@
             padding: 30px;
             border-radius: 15px;
             margin-bottom: 30px;
-            box-shadow: 0 6px 18px rgba(23, 77, 131, 0.12);
+            box-shadow: 0 6px 18px #174d8318;
         }
 
         .welcome .date {
@@ -120,7 +116,7 @@
 
         .welcome h2 {
             font-size: 28px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .welcome p {
@@ -128,12 +124,13 @@
             line-height: 1.7;
         }
 
-        /* JUDUL BAGIAN */
+        /* MENU */
         .section-heading {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
             margin-bottom: 17px;
         }
 
@@ -142,11 +139,10 @@
         }
 
         .section-heading span {
-            color: var(--muted);
             font-size: 13px;
+            color: var(--abu);
         }
 
-        /* ENAM MENU */
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -156,73 +152,65 @@
         .menu-card {
             display: flex;
             align-items: flex-start;
-            gap: 15px;
+            gap: 14px;
             min-height: 145px;
-            padding: 23px 20px;
-            background: var(--white);
-            border: 1px solid var(--border);
+            padding: 22px 18px;
+            background: white;
+            border: 1px solid var(--garis);
             border-radius: 13px;
+            color: var(--teks);
             text-decoration: none;
-            color: var(--text);
-            box-shadow: 0 3px 10px rgba(20, 50, 80, 0.03);
-            transition: transform 0.2s, box-shadow 0.2s,
-                        border-color 0.2s;
+            transition: 0.2s;
+            box-shadow: 0 3px 10px #14325008;
         }
 
         .menu-card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-3px);
             border-color: #83b4e5;
-            box-shadow: 0 8px 20px rgba(20, 50, 80, 0.09);
+            box-shadow: 0 8px 20px #14325012;
         }
 
         .menu-icon {
+            width: 48px;
+            height: 48px;
             flex-shrink: 0;
-            width: 49px;
-            height: 49px;
             display: grid;
             place-items: center;
+            background: var(--biru-muda);
             border-radius: 12px;
-            background: var(--primary-light);
-            color: var(--primary);
             font-size: 25px;
         }
 
         .menu-content h3 {
-            font-size: 16px;
+            color: var(--biru);
+            font-size: 15px;
             line-height: 1.5;
-            color: var(--primary);
-            margin-bottom: 7px;
+            margin-bottom: 8px;
         }
 
         .menu-content p {
-            color: var(--muted);
+            color: var(--abu);
             font-size: 13px;
             line-height: 1.6;
         }
 
-        .menu-arrow {
-            color: #94a3b8;
-            margin-left: auto;
-            font-size: 20px;
-        }
-
         /* TRACKING */
-        .tracking-section {
+        .panel {
             background: white;
-            border: 1px solid var(--border);
+            border: 1px solid var(--garis);
             border-radius: 14px;
             padding: 26px;
             margin-top: 30px;
-            box-shadow: 0 3px 10px rgba(20, 50, 80, 0.03);
+            box-shadow: 0 3px 10px #14325008;
         }
 
-        .tracking-section h2 {
+        .panel h2 {
             font-size: 21px;
-            margin-bottom: 9px;
+            margin-bottom: 10px;
         }
 
-        .tracking-description {
-            color: var(--muted);
+        .description {
+            color: var(--abu);
             font-size: 14px;
             line-height: 1.7;
             margin-bottom: 20px;
@@ -230,17 +218,17 @@
 
         .search-form {
             display: flex;
-            gap: 11px;
+            gap: 10px;
         }
 
         .search-form input {
             flex: 1;
             min-width: 0;
-            padding: 14px 15px;
+            padding: 14px;
             border: 1px solid #cbd5e1;
             border-radius: 8px;
-            outline: none;
             font-size: 14px;
+            outline: none;
         }
 
         .search-form input:focus {
@@ -249,71 +237,75 @@
         }
 
         .search-form button {
-            background: var(--primary);
-            color: white;
             border: none;
-            padding: 0 26px;
             border-radius: 8px;
+            background: var(--biru);
+            color: white;
             font-weight: bold;
+            padding: 0 27px;
             cursor: pointer;
         }
 
         .search-form button:hover {
-            background: var(--primary-dark);
+            background: var(--biru-gelap);
         }
 
         .message {
             padding: 14px 16px;
-            background: #f8fafc;
-            border: 1px solid var(--border);
-            border-radius: 8px;
             margin-top: 18px;
-            color: var(--muted);
+            background: #f8fafc;
+            border: 1px solid var(--garis);
+            border-radius: 8px;
+            color: var(--abu);
             font-size: 14px;
             line-height: 1.6;
         }
 
         .message.error {
-            background: #fff1f2;
-            border-color: #fecdd3;
-            color: #be123c;
+            color: #b91c1c;
+            background: #fef2f2;
+            border-color: #fecaca;
         }
 
-        /* HASIL TRACKING */
-        .tracking-result {
+        .results {
             display: none;
-            margin-top: 23px;
-            padding-top: 22px;
-            border-top: 1px solid var(--border);
+            margin-top: 25px;
+            padding-top: 23px;
+            border-top: 1px solid var(--garis);
         }
 
-        .result-header {
+        .result-heading {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            gap: 15px;
             flex-wrap: wrap;
-            margin-bottom: 20px;
+            gap: 14px;
+            margin-bottom: 22px;
         }
 
-        .result-header h3 {
+        .result-heading h3 {
             font-size: 19px;
-            margin-bottom: 7px;
+            margin-bottom: 8px;
         }
 
-        .result-header p {
-            color: var(--muted);
+        .result-heading p {
             font-size: 14px;
+            color: var(--abu);
         }
 
-        .status-badge {
+        .status {
             display: inline-block;
-            padding: 8px 13px;
             border-radius: 20px;
+            padding: 8px 13px;
             font-size: 12px;
             font-weight: bold;
-            background: #dbeafe;
             color: #1d4ed8;
+            background: #dbeafe;
+        }
+
+        .status.selesai {
+            color: #166534;
+            background: #dcfce7;
         }
 
         .progress-label {
@@ -323,24 +315,24 @@
 
         .progress-track {
             height: 11px;
-            background: #e2e8f0;
+            margin: 12px 0 8px;
             border-radius: 20px;
             overflow: hidden;
-            margin: 12px 0 8px;
+            background: #e2e8f0;
         }
 
         .progress-fill {
             height: 100%;
             width: 0;
-            background: var(--success);
             border-radius: 20px;
-            transition: width 0.35s ease;
+            background: #16a34a;
+            transition: width 0.35s;
         }
 
         .progress-caption {
-            color: var(--muted);
+            color: var(--abu);
             font-size: 12px;
-            margin-bottom: 23px;
+            margin-bottom: 22px;
         }
 
         .detail-grid {
@@ -350,33 +342,73 @@
         }
 
         .detail-item {
-            background: #f7f9fc;
             padding: 16px;
+            background: #f7f9fc;
             border-radius: 9px;
             overflow-wrap: anywhere;
         }
 
         .detail-label {
-            color: var(--muted);
+            color: var(--abu);
             font-size: 12px;
             margin-bottom: 8px;
         }
 
         .detail-value {
-            font-weight: bold;
             font-size: 14px;
+            font-weight: bold;
         }
 
-        /* RIWAYAT PENGIRIMAN */
-        .history {
-            margin-top: 26px;
+        /* DETAIL PEMESANAN */
+        .subsection {
+            margin-top: 27px;
         }
 
-        .history h3 {
+        .subsection h3 {
             font-size: 17px;
-            margin-bottom: 17px;
+            margin-bottom: 14px;
         }
 
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th, td {
+            border: 1px solid var(--garis);
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background: var(--biru-muda);
+            color: var(--biru-gelap);
+        }
+
+        .order-summary {
+            margin-top: 15px;
+            padding: 16px;
+            background: #f7f9fc;
+            border-radius: 9px;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .order-total {
+            color: var(--biru);
+            font-size: 17px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        /* HISTORI */
         .history-item {
             border-left: 3px solid #2878b9;
             padding: 0 0 20px 17px;
@@ -388,27 +420,26 @@
         }
 
         .history-time {
-            color: var(--muted);
+            color: var(--abu);
             font-size: 12px;
             margin-bottom: 6px;
         }
 
-        .history-description {
+        .history-text {
             font-size: 14px;
             line-height: 1.6;
         }
 
-        /* FOOTER */
-        .footer {
-            text-align: center;
-            padding: 22px 15px;
-            color: var(--muted);
-            font-size: 12px;
-            border-top: 1px solid var(--border);
+        footer {
+            padding: 23px 15px;
             background: white;
+            border-top: 1px solid var(--garis);
+            color: var(--abu);
+            text-align: center;
+            font-size: 12px;
+            line-height: 1.7;
         }
 
-        /* RESPONSIF */
         @media (max-width: 900px) {
             .menu-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -416,22 +447,21 @@
         }
 
         @media (max-width: 600px) {
-            .header {
+            header {
                 padding: 15px;
-                align-items: flex-start;
             }
 
             .brand h1 {
-                font-size: 19px;
+                font-size: 20px;
             }
 
-            .user-label {
+            #headerUser {
                 display: none;
             }
 
-            .container {
+            main {
                 margin-top: 18px;
-                padding: 0 13px 25px;
+                padding: 0 13px 28px;
             }
 
             .welcome {
@@ -449,10 +479,9 @@
 
             .menu-card {
                 min-height: auto;
-                padding: 18px;
             }
 
-            .tracking-section {
+            .panel {
                 padding: 19px;
             }
 
@@ -463,45 +492,39 @@
             .search-form button {
                 padding: 14px;
             }
-
-            .section-heading {
-                align-items: flex-start;
-                flex-direction: column;
-            }
         }
     </style>
 </head>
 
 <body>
 
-    <!-- HEADER -->
-    <header class="header">
+    <header>
         <div class="brand">
             <div class="brand-icon">🎓</div>
             <div>
                 <h1>SITTA</h1>
-                <p>Universitas Terbuka</p>
+                <p>Sistem Informasi Tiras dan Transaksi Bahan Ajar</p>
             </div>
         </div>
 
-        <div class="header-actions">
-            <span class="user-label" id="headerUser">Pengguna SITTA</span>
-            <button type="button" class="logout-button" id="logoutButton">
-                Keluar ↗
+        <div class="header-right">
+            <span id="headerUser">Pengguna SITTA</span>
+            <button type="button" class="logout" id="logoutButton">
+                Keluar
             </button>
         </div>
     </header>
 
-    <main class="container">
+    <main>
 
-        <!-- GREETING OTOMATIS -->
+        <!-- GREETING -->
         <section class="welcome">
             <p class="date" id="dateInfo"></p>
             <h2 id="greeting">Selamat datang!</h2>
             <p>
                 Selamat datang di Dashboard Menu Utama SITTA.
-                Silakan pilih menu yang ingin Anda gunakan untuk
-                mengakses informasi bahan ajar dan pengiriman.
+                Silakan pilih menu yang ingin digunakan untuk mengakses
+                informasi bahan ajar, pemesanan, dan pengiriman.
             </p>
         </section>
 
@@ -518,73 +541,67 @@
                     <div class="menu-icon">📚</div>
                     <div class="menu-content">
                         <h3>Informasi Bahan Ajar</h3>
-                        <p>Informasi data, jenis, dan ketersediaan stok bahan ajar.</p>
+                        <p>Melihat informasi, jenis, dan ketersediaan stok bahan ajar.</p>
                     </div>
-                    <span class="menu-arrow">›</span>
                 </a>
 
                 <a class="menu-card" href="#tracking">
                     <div class="menu-icon">📦</div>
                     <div class="menu-content">
                         <h3>Tracking Pengiriman</h3>
-                        <p>Periksa status pengiriman berdasarkan nomor Delivery Order.</p>
+                        <p>Mencari status pengiriman berdasarkan nomor DO.</p>
                     </div>
-                    <span class="menu-arrow">›</span>
                 </a>
 
                 <a class="menu-card" href="laporan.html">
                     <div class="menu-icon">📊</div>
                     <div class="menu-content">
                         <h3>Laporan</h3>
-                        <p>Lihat informasi dan laporan transaksi bahan ajar.</p>
+                        <p>Melihat informasi laporan transaksi bahan ajar.</p>
                     </div>
-                    <span class="menu-arrow">›</span>
                 </a>
 
                 <a class="menu-card" href="monitoring.html">
                     <div class="menu-icon">🚚</div>
                     <div class="menu-content">
                         <h3>Monitoring Progress DO Bahan Ajar</h3>
-                        <p>Pantau perkembangan proses pengiriman Delivery Order.</p>
+                        <p>Memantau perkembangan pengiriman Delivery Order.</p>
                     </div>
-                    <span class="menu-arrow">›</span>
                 </a>
 
                 <a class="menu-card" href="rekap.html">
                     <div class="menu-icon">🗂️</div>
                     <div class="menu-content">
                         <h3>Rekap Bahan Ajar</h3>
-                        <p>Lihat rekapitulasi data dan jumlah stok bahan ajar.</p>
+                        <p>Melihat rekapitulasi data bahan ajar.</p>
                     </div>
-                    <span class="menu-arrow">›</span>
                 </a>
 
                 <a class="menu-card" href="histori.html">
                     <div class="menu-icon">🕘</div>
                     <div class="menu-content">
                         <h3>Histori Transaksi Bahan Ajar</h3>
-                        <p>Lihat riwayat transaksi dan perjalanan pengiriman.</p>
+                        <p>Melihat riwayat transaksi bahan ajar.</p>
                     </div>
-                    <span class="menu-arrow">›</span>
                 </a>
 
             </div>
         </section>
 
-        <!-- TRACKING PENGIRIMAN -->
-        <section class="tracking-section" id="tracking">
-            <h2>Tracking Pengiriman Bahan Ajar</h2>
-            <p class="tracking-description">
-                Masukkan nomor Delivery Order (DO) untuk mengetahui
-                nama mahasiswa, status pengiriman, ekspedisi, tanggal
-                kirim, jenis paket, dan total pembayaran.
+        <!-- PENCARIAN TRACKING DAN PEMESANAN -->
+        <section class="panel" id="tracking">
+            <h2>Tracking dan Pemesanan Bahan Ajar</h2>
+            <p class="description">
+                Masukkan nomor Delivery Order (DO) untuk melihat data
+                pemesanan, nama mahasiswa, rincian bahan ajar, total
+                pembayaran, status pengiriman, ekspedisi, dan histori perjalanan.
             </p>
 
             <form class="search-form" id="trackingForm">
                 <input
                     type="text"
                     id="nomorDO"
-                    placeholder="Contoh: 2023001234"
+                    placeholder="Masukkan Nomor DO, contoh: 2023001234"
                     aria-label="Nomor Delivery Order"
                     required
                 >
@@ -592,32 +609,27 @@
             </form>
 
             <div class="message" id="message" aria-live="polite">
-                Masukkan nomor DO, kemudian tekan tombol Cari DO.
+                Silakan masukkan nomor DO untuk mencari data pemesanan
+                dan tracking pengiriman.
             </div>
 
-            <div class="tracking-result" id="trackingResult">
+            <div class="results" id="results">
 
-                <div class="result-header">
+                <div class="result-heading">
                     <div>
-                        <h3 id="resultDO">Nomor DO</h3>
+                        <h3 id="resultDO"></h3>
                         <p id="resultNamaHeader"></p>
                     </div>
-                    <span class="status-badge" id="resultStatus"></span>
+                    <span class="status" id="resultStatus"></span>
                 </div>
 
                 <p class="progress-label">Progress Pengiriman</p>
-                <div
-                    class="progress-track"
-                    role="progressbar"
-                    aria-label="Progress pengiriman"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                    id="progressBar"
-                >
+                <div class="progress-track">
                     <div class="progress-fill" id="progressFill"></div>
                 </div>
                 <p class="progress-caption" id="progressCaption"></p>
 
+                <!-- INFORMASI PENGIRIMAN -->
                 <div class="detail-grid">
                     <div class="detail-item">
                         <div class="detail-label">Nama Mahasiswa</div>
@@ -635,7 +647,7 @@
                     </div>
 
                     <div class="detail-item">
-                        <div class="detail-label">Jenis Paket / Kode Lokasi</div>
+                        <div class="detail-label">Kode Lokasi / Paket</div>
                         <div class="detail-value" id="detailPaket"></div>
                     </div>
 
@@ -643,29 +655,57 @@
                         <div class="detail-label">Total Pembayaran</div>
                         <div class="detail-value" id="detailTotal"></div>
                     </div>
+
+                    <div class="detail-item">
+                        <div class="detail-label">Status Pesanan</div>
+                        <div class="detail-value" id="detailStatusPesanan"></div>
+                    </div>
                 </div>
 
-                <div class="history">
+                <!-- RINCIAN PEMESANAN -->
+                <div class="subsection">
+                    <h3>Detail Pemesanan Bahan Ajar</h3>
+                    <div id="orderInfo"></div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Kode Barang</th>
+                                    <th>Nama Bahan Ajar</th>
+                                    <th>Jumlah</th>
+                                    <th>Harga Satuan</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orderTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="order-summary" id="orderSummary"></div>
+                </div>
+
+                <!-- HISTORI PENGIRIMAN -->
+                <div class="subsection">
                     <h3>Histori Perjalanan Pengiriman</h3>
                     <div id="historyList"></div>
                 </div>
+
             </div>
         </section>
 
     </main>
 
-    <footer class="footer">
+    <footer>
         SITTA — Sistem Informasi Tiras dan Transaksi Bahan Ajar
-        <br><br>
+        <br>
         Universitas Terbuka
     </footer>
 
-    <!-- Sumber data tetap dari data.js -->
+    <!-- Data bersumber dari data.js -->
     <script src="./data.js"></script>
 
     <script>
         // =========================================
-        // 1. PERIKSA LOGIN
+        // 1. PERIKSA SESI LOGIN
         // =========================================
         const sesi = sessionStorage.getItem("sittaPenggunaAktif");
 
@@ -682,7 +722,7 @@
         }
 
         // =========================================
-        // 2. GREETING BERDASARKAN WAKTU LOKAL
+        // 2. GREETING SESUAI WAKTU LOKAL
         // =========================================
         function tampilkanGreeting() {
             const sekarang = new Date();
@@ -720,7 +760,7 @@
         tampilkanGreeting();
 
         // =========================================
-        // 3. LOGOUT
+        // 3. KELUAR DARI APLIKASI
         // =========================================
         document.getElementById("logoutButton")
             .addEventListener("click", function () {
@@ -729,18 +769,22 @@
             });
 
         // =========================================
-        // 4. FORMAT TANGGAL
+        // 4. FORMAT RUPIAH DAN TANGGAL
         // =========================================
-        function formatTanggal(tanggal) {
-            if (!tanggal) return "-";
+        function formatRupiah(nilai) {
+            return "Rp " + Number(nilai || 0).toLocaleString("id-ID");
+        }
 
-            const hasil = new Date(tanggal + "T00:00:00");
+        function formatTanggal(nilai) {
+            if (!nilai) return "-";
 
-            if (Number.isNaN(hasil.getTime())) {
-                return tanggal;
+            const tanggal = new Date(nilai + "T00:00:00");
+
+            if (Number.isNaN(tanggal.getTime())) {
+                return nilai;
             }
 
-            return hasil.toLocaleDateString("id-ID", {
+            return tanggal.toLocaleDateString("id-ID", {
                 day: "numeric",
                 month: "long",
                 year: "numeric"
@@ -748,25 +792,159 @@
         }
 
         // =========================================
-        // 5. CARI DATA DELIVERY ORDER
+        // 5. TAMPILKAN DETAIL PEMESANAN
+        // =========================================
+        function tampilkanPemesanan(nomor, tracking) {
+            const tbody = document.getElementById("orderTableBody");
+            const orderInfo = document.getElementById("orderInfo");
+            const orderSummary = document.getElementById("orderSummary");
+
+            tbody.replaceChildren();
+            orderInfo.replaceChildren();
+            orderSummary.replaceChildren();
+
+            const pesanan = typeof dataPemesanan !== "undefined"
+                ? dataPemesanan[nomor]
+                : null;
+
+            if (!pesanan) {
+                const pesan = document.createElement("p");
+                pesan.className = "message";
+                pesan.textContent =
+                    "Data pemesanan untuk nomor DO ini belum tersedia.";
+                orderInfo.appendChild(pesan);
+
+                document.getElementById("detailStatusPesanan").textContent = "-";
+                return;
+            }
+
+            const tanggalPesan = document.createElement("p");
+            tanggalPesan.className = "description";
+            tanggalPesan.textContent =
+                "Tanggal pemesanan: " +
+                formatTanggal(pesanan.tanggalPesan);
+
+            orderInfo.appendChild(tanggalPesan);
+
+            const daftar = Array.isArray(pesanan.daftarPesanan)
+                ? pesanan.daftarPesanan
+                : [];
+
+            daftar.forEach(function (barang) {
+                const baris = document.createElement("tr");
+
+                const nilai = [
+                    barang.kodeBarang || "-",
+                    barang.namaBarang || "-",
+                    barang.jumlah ?? 0,
+                    formatRupiah(barang.harga),
+                    formatRupiah(
+                        barang.subtotal ??
+                        Number(barang.harga || 0) * Number(barang.jumlah || 0)
+                    )
+                ];
+
+                nilai.forEach(function (teks) {
+                    const td = document.createElement("td");
+                    td.textContent = teks;
+                    baris.appendChild(td);
+                });
+
+                tbody.appendChild(baris);
+            });
+
+            const totalItem = document.createElement("p");
+            totalItem.textContent =
+                "Jumlah seluruh bahan ajar: " +
+                (pesanan.totalItem ??
+                    daftar.reduce(function (total, barang) {
+                        return total + Number(barang.jumlah || 0);
+                    }, 0)) +
+                " buku";
+
+            const statusPesanan = document.createElement("p");
+            statusPesanan.textContent =
+                "Status pesanan: " + (pesanan.statusPesanan || "-");
+
+            const totalBayar = document.createElement("p");
+            totalBayar.className = "order-total";
+            totalBayar.textContent =
+                "Total pembayaran: " +
+                formatRupiah(
+                    pesanan.totalPembayaran ??
+                    daftar.reduce(function (total, barang) {
+                        return total +
+                            Number(barang.subtotal ??
+                                Number(barang.harga || 0) *
+                                Number(barang.jumlah || 0));
+                    }, 0)
+                );
+
+            orderSummary.appendChild(totalItem);
+            orderSummary.appendChild(statusPesanan);
+            orderSummary.appendChild(totalBayar);
+
+            document.getElementById("detailStatusPesanan").textContent =
+                pesanan.statusPesanan || "-";
+        }
+
+        // =========================================
+        // 6. TAMPILKAN HISTORI TRACKING
+        // =========================================
+        function tampilkanHistori(tracking) {
+            const historyList = document.getElementById("historyList");
+            historyList.replaceChildren();
+
+            const perjalanan = Array.isArray(tracking.perjalanan)
+                ? tracking.perjalanan
+                : [];
+
+            if (perjalanan.length === 0) {
+                const pesan = document.createElement("p");
+                pesan.className = "message";
+                pesan.textContent = "Belum ada histori perjalanan.";
+                historyList.appendChild(pesan);
+                return;
+            }
+
+            perjalanan.forEach(function (item) {
+                const baris = document.createElement("div");
+                baris.className = "history-item";
+
+                const waktu = document.createElement("div");
+                waktu.className = "history-time";
+                waktu.textContent = item.waktu || "-";
+
+                const keterangan = document.createElement("div");
+                keterangan.className = "history-text";
+                keterangan.textContent = item.keterangan || "-";
+
+                baris.appendChild(waktu);
+                baris.appendChild(keterangan);
+                historyList.appendChild(baris);
+            });
+        }
+
+        // =========================================
+        // 7. PENCARIAN NOMOR DELIVERY ORDER
         // =========================================
         document.getElementById("trackingForm")
             .addEventListener("submit", function (event) {
                 event.preventDefault();
 
-                const nomor = document
-                    .getElementById("nomorDO")
+                const nomor = document.getElementById("nomorDO")
                     .value.trim();
 
                 const message = document.getElementById("message");
-                const result = document.getElementById("trackingResult");
+                const results = document.getElementById("results");
 
-                result.style.display = "none";
+                results.style.display = "none";
                 message.style.display = "block";
                 message.classList.remove("error");
 
                 if (!nomor) {
-                    message.textContent = "Silakan masukkan nomor DO.";
+                    message.textContent =
+                        "Silakan masukkan nomor DO terlebih dahulu.";
                     message.classList.add("error");
                     return;
                 }
@@ -778,17 +956,18 @@
                     return;
                 }
 
-                const data = dataTracking[nomor];
+                const tracking = dataTracking[nomor];
 
-                if (!data) {
+                if (!tracking) {
                     message.textContent =
                         "Nomor DO " + nomor +
-                        " tidak ditemukan. Silakan periksa kembali nomor DO.";
+                        " tidak ditemukan pada data tracking.";
                     message.classList.add("error");
                     return;
                 }
 
-                const status = String(data.status || "Belum diketahui");
+                // Informasi pengiriman
+                const status = tracking.status || "Belum diketahui";
                 const statusLower = status.toLowerCase();
 
                 let progress = 25;
@@ -807,81 +986,52 @@
                 }
 
                 document.getElementById("resultDO").textContent =
-                    "Nomor DO: " + (data.nomorDO || nomor);
+                    "Nomor DO: " + (tracking.nomorDO || nomor);
 
                 document.getElementById("resultNamaHeader").textContent =
-                    "Mahasiswa: " + (data.nama || "-");
+                    "Nama mahasiswa: " + (tracking.nama || "-");
 
-                document.getElementById("resultStatus").textContent = status;
+                const badge = document.getElementById("resultStatus");
+                badge.textContent = status;
+                badge.classList.toggle("selesai", progress === 100);
 
                 document.getElementById("progressFill").style.width =
                     progress + "%";
-
-                document.getElementById("progressBar").setAttribute(
-                    "aria-valuenow",
-                    String(progress)
-                );
 
                 document.getElementById("progressCaption").textContent =
                     progress + "% — " + status;
 
                 document.getElementById("detailNama").textContent =
-                    data.nama || "-";
+                    tracking.nama || "-";
 
                 document.getElementById("detailEkspedisi").textContent =
-                    data.ekspedisi || "-";
+                    tracking.ekspedisi || "-";
 
                 document.getElementById("detailTanggal").textContent =
-                    formatTanggal(data.tanggalKirim);
+                    formatTanggal(tracking.tanggalKirim);
 
                 document.getElementById("detailPaket").textContent =
-                    data.paket || "-";
+                    tracking.paket || "-";
 
                 document.getElementById("detailTotal").textContent =
-                    data.total || "-";
+                    tracking.total || "-";
+
+                // Hubungkan dengan data pemesanan bernomor DO sama
+                tampilkanPemesanan(nomor, tracking);
 
                 // Tampilkan histori perjalanan
-                const historyList = document.getElementById("historyList");
-                historyList.replaceChildren();
-
-                const perjalanan = Array.isArray(data.perjalanan)
-                    ? data.perjalanan
-                    : [];
-
-                if (perjalanan.length === 0) {
-                    const kosong = document.createElement("p");
-                    kosong.className = "message";
-                    kosong.textContent =
-                        "Belum ada histori perjalanan untuk nomor DO ini.";
-                    historyList.appendChild(kosong);
-                } else {
-                    perjalanan.forEach(function (item) {
-                        const baris = document.createElement("div");
-                        baris.className = "history-item";
-
-                        const waktu = document.createElement("div");
-                        waktu.className = "history-time";
-                        waktu.textContent = item.waktu || "-";
-
-                        const keterangan = document.createElement("div");
-                        keterangan.className = "history-description";
-                        keterangan.textContent = item.keterangan || "-";
-
-                        baris.appendChild(waktu);
-                        baris.appendChild(keterangan);
-                        historyList.appendChild(baris);
-                    });
-                }
+                tampilkanHistori(tracking);
 
                 message.style.display = "none";
-                result.style.display = "block";
+                results.style.display = "block";
 
-                result.scrollIntoView({
+                results.scrollIntoView({
                     behavior: "smooth",
                     block: "start"
                 });
             });
     </script>
+
 </body>
 </html>
 ```
