@@ -28,9 +28,9 @@
             grid-template-columns: 1fr 1fr;
             width: 100%;
             max-width: 900px;
-            min-height: 520px;
+            min-height: 500px;
             overflow: hidden;
-            background: #ffffff;
+            background: white;
             border-radius: 20px;
             box-shadow: 0 15px 45px rgba(0, 0, 0, 0.22);
         }
@@ -40,7 +40,7 @@
             flex-direction: column;
             justify-content: center;
             padding: 45px;
-            color: #ffffff;
+            color: white;
             background: linear-gradient(160deg, #0b3b75, #116d91);
         }
 
@@ -59,17 +59,13 @@
 
         .login-info h1 {
             margin-bottom: 15px;
-            font-size: 34px;
+            font-size: 36px;
         }
 
         .login-info p {
+            margin-bottom: 12px;
             line-height: 1.8;
             color: #e4efff;
-        }
-
-        .login-info .small-text {
-            margin-top: 35px;
-            font-size: 12px;
         }
 
         .login-form-area {
@@ -86,7 +82,7 @@
         }
 
         .subtitle {
-            margin-bottom: 30px;
+            margin-bottom: 28px;
             color: #667085;
             font-size: 14px;
             line-height: 1.6;
@@ -138,9 +134,9 @@
             font-size: 12px;
         }
 
-        .login-button {
+        .login-button,
+        .modal-submit {
             width: 100%;
-            margin-top: 5px;
             padding: 14px;
             border: none;
             border-radius: 9px;
@@ -151,8 +147,14 @@
             font-weight: bold;
         }
 
-        .login-button:hover {
+        .login-button:hover,
+        .modal-submit:hover {
             background: #084780;
+        }
+
+        .login-button:disabled {
+            cursor: wait;
+            opacity: 0.6;
         }
 
         .extra-actions {
@@ -174,24 +176,20 @@
             text-decoration: underline;
         }
 
-        .help-text {
-            margin-top: 25px;
-            padding: 12px;
-            border-radius: 8px;
-            background: #f2f7fc;
-            color: #526477;
-            font-size: 12px;
-            line-height: 1.7;
-        }
-
         .footer {
-            margin-top: 25px;
-            color: #98a2b3;
+            margin-top: 35px;
+            padding-top: 18px;
+            border-top: 1px solid #eaecf0;
+            color: #667085;
             text-align: center;
-            font-size: 11px;
+            font-size: 12px;
+            line-height: 1.8;
         }
 
-        /* Pop-up */
+        .footer strong {
+            color: #0b5cab;
+        }
+
         .modal {
             position: fixed;
             inset: 0;
@@ -212,7 +210,7 @@
             max-width: 420px;
             padding: 28px;
             border-radius: 16px;
-            background: #ffffff;
+            background: white;
             box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
         }
 
@@ -242,17 +240,6 @@
             line-height: 1.6;
         }
 
-        .modal-submit {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            background: #0b5cab;
-            color: white;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
         .modal-message {
             margin-top: 12px;
             color: #344054;
@@ -271,11 +258,7 @@
             }
 
             .login-info h1 {
-                font-size: 27px;
-            }
-
-            .login-info .small-text {
-                margin-top: 18px;
+                font-size: 28px;
             }
 
             .login-form-area {
@@ -297,10 +280,6 @@
                 pengelolaan bahan ajar, pemesanan, dan pelacakan
                 pengiriman bahan ajar Universitas Terbuka.
             </p>
-            <p class="small-text">
-                Sistem Informasi Tata Bahan Ajar<br>
-                Universitas Terbuka
-            </p>
         </section>
 
         <section class="login-form-area">
@@ -315,7 +294,6 @@
                     <input
                         type="email"
                         id="email"
-                        name="email"
                         placeholder="Masukkan email"
                         autocomplete="username"
                         required
@@ -328,7 +306,6 @@
                         <input
                             type="password"
                             id="password"
-                            name="password"
                             placeholder="Masukkan password"
                             autocomplete="current-password"
                             required
@@ -341,7 +318,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="login-button">
+                <button type="submit" class="login-button" id="tombolLogin">
                     Login
                 </button>
             </form>
@@ -350,133 +327,169 @@
                 <button type="button" class="text-button" id="tombolLupa">
                     Lupa Password?
                 </button>
+
                 <button type="button" class="text-button" id="tombolDaftar">
                     Daftar Akun
                 </button>
             </div>
 
-            <div class="help-text">
-                <strong>Contoh akun untuk pengujian:</strong><br>
-                Email: rina@ut.ac.id<br>
-                Password: rina123
-            </div>
-
             <div class="footer">
                 SITTA · Universitas Terbuka
+                <br>
+                Aplikasi dibuat oleh <strong>Sumardi Hutabarat</strong>
             </div>
         </section>
     </div>
 
     <!-- Pop-up Lupa Password -->
-    <div class="modal" id="modalLupa" role="dialog" aria-modal="true"
-         aria-labelledby="judulLupa">
+    <div class="modal" id="modalLupa" role="dialog" aria-modal="true">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="judulLupa">Lupa Password</h3>
+                <h3>Lupa Password</h3>
                 <button type="button" class="close-button"
-                        data-tutup="modalLupa" aria-label="Tutup">&times;</button>
+                    data-tutup="modalLupa" aria-label="Tutup">&times;</button>
             </div>
 
             <p class="modal-description">
-                Masukkan email akun Anda. Pada versi tugas ini, fitur
-                pemulihan password hanya berupa simulasi karena belum
-                menggunakan layanan email atau backend.
+                Masukkan email akun Anda untuk memeriksa apakah email
+                terdaftar. Pemulihan password melalui email belum tersedia
+                pada versi aplikasi ini.
             </p>
 
             <form id="formLupa">
                 <div class="form-group">
                     <label for="emailLupa">Email</label>
                     <input type="email" id="emailLupa"
-                           placeholder="nama@ut.ac.id" required>
+                        placeholder="Masukkan email" required>
                 </div>
+
                 <button class="modal-submit" type="submit">
                     Periksa Email
                 </button>
+
                 <p class="modal-message" id="pesanLupa"></p>
             </form>
         </div>
     </div>
 
     <!-- Pop-up Daftar Akun -->
-    <div class="modal" id="modalDaftar" role="dialog" aria-modal="true"
-         aria-labelledby="judulDaftar">
+    <div class="modal" id="modalDaftar" role="dialog" aria-modal="true">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="judulDaftar">Daftar Akun</h3>
+                <h3>Daftar Akun</h3>
                 <button type="button" class="close-button"
-                        data-tutup="modalDaftar" aria-label="Tutup">&times;</button>
+                    data-tutup="modalDaftar" aria-label="Tutup">&times;</button>
             </div>
 
             <p class="modal-description">
-                Formulir ini merupakan simulasi pendaftaran. Data akun baru
-                tidak disimpan karena aplikasi tugas ini menggunakan data
-                contoh dari file data.js tanpa backend.
+                Isi formulir berikut. Pada versi ini, pendaftaran hanya
+                berupa simulasi dan belum menyimpan akun baru.
             </p>
 
             <form id="formDaftar">
                 <div class="form-group">
                     <label for="namaDaftar">Nama Lengkap</label>
                     <input type="text" id="namaDaftar"
-                           placeholder="Masukkan nama lengkap" required>
+                        placeholder="Masukkan nama lengkap" required>
                 </div>
 
                 <div class="form-group">
                     <label for="emailDaftar">Email</label>
                     <input type="email" id="emailDaftar"
-                           placeholder="nama@ut.ac.id" required>
+                        placeholder="Masukkan email" required>
                 </div>
 
                 <div class="form-group">
                     <label for="passwordDaftar">Password</label>
                     <input type="password" id="passwordDaftar"
-                           placeholder="Buat password" minlength="6" required>
+                        placeholder="Buat password" minlength="6" required>
                 </div>
 
                 <button class="modal-submit" type="submit">
                     Kirim Pendaftaran
                 </button>
+
                 <p class="modal-message" id="pesanDaftar"></p>
             </form>
         </div>
     </div>
 
-    <!-- Memakai data pengguna dari file dosen -->
-    <script src="data.js"></script>
-
     <script>
+        let dataSiap = false;
+        let penggunaData = [];
+
         const formLogin = document.getElementById("formLogin");
         const inputEmail = document.getElementById("email");
         const inputPassword = document.getElementById("password");
+        const tombolLogin = document.getElementById("tombolLogin");
 
-        // Menampilkan atau menyembunyikan password
+        // Memuat file data.js dari folder yang sama dengan login.html
+        const scriptData = document.createElement("script");
+        scriptData.src = "./data.js";
+
+        scriptData.onload = function () {
+            if (typeof dataPengguna !== "undefined"
+                && Array.isArray(dataPengguna)) {
+                penggunaData = dataPengguna;
+                dataSiap = true;
+                tombolLogin.disabled = false;
+            } else {
+                tombolLogin.disabled = true;
+                alert(
+                    "File data.js berhasil dimuat, tetapi dataPengguna tidak ditemukan. Periksa nama variabel pada data.js."
+                );
+            }
+        };
+
+        scriptData.onerror = function () {
+            tombolLogin.disabled = true;
+            alert(
+                "File data.js tidak dapat dimuat. Pastikan data.js berada satu folder dengan login.html dan nama filenya benar."
+            );
+        };
+
+        tombolLogin.disabled = true;
+        tombolLogin.textContent = "Memuat data...";
+        document.head.appendChild(scriptData);
+
+        scriptData.onload = function () {
+            if (typeof dataPengguna !== "undefined"
+                && Array.isArray(dataPengguna)) {
+                penggunaData = dataPengguna;
+                dataSiap = true;
+                tombolLogin.disabled = false;
+                tombolLogin.textContent = "Login";
+            } else {
+                tombolLogin.textContent = "Login";
+                alert(
+                    "Data pengguna tidak ditemukan. Pastikan data.js menggunakan variabel dataPengguna."
+                );
+            }
+        };
+
+        // Tampilkan atau sembunyikan password
         document.getElementById("tombolLihatPassword")
             .addEventListener("click", function () {
-                const sedangTersembunyi =
-                    inputPassword.type === "password";
+                const tersembunyi = inputPassword.type === "password";
 
-                inputPassword.type = sedangTersembunyi
-                    ? "text"
-                    : "password";
-
-                this.textContent = sedangTersembunyi
-                    ? "Sembunyi"
-                    : "Lihat";
+                inputPassword.type = tersembunyi ? "text" : "password";
+                this.textContent = tersembunyi ? "Sembunyi" : "Lihat";
             });
 
-        // Memeriksa email dan password menggunakan data.js
+        // Proses login
         formLogin.addEventListener("submit", function (event) {
             event.preventDefault();
+
+            if (!dataSiap) {
+                alert("Data pengguna belum siap. Periksa file data.js.");
+                return;
+            }
 
             const email = inputEmail.value.trim().toLowerCase();
             const password = inputPassword.value;
 
-            if (typeof dataPengguna === "undefined") {
-                alert("Data pengguna tidak ditemukan. Periksa file data.js.");
-                return;
-            }
-
-            const pengguna = dataPengguna.find(function (akun) {
-                return akun.email.toLowerCase() === email
+            const pengguna = penggunaData.find(function (akun) {
+                return String(akun.email).toLowerCase() === email
                     && akun.password === password;
             });
 
@@ -485,7 +498,6 @@
                 return;
             }
 
-            // Menyimpan sesi login sementara di browser
             sessionStorage.setItem(
                 "sittaPenggunaAktif",
                 JSON.stringify({
@@ -497,19 +509,10 @@
                 })
             );
 
-            // Membuka aplikasi utama setelah login berhasil
             window.location.href = "index.html";
         });
 
-        // Membuka dan menutup pop-up
-        document.getElementById("tombolLupa").addEventListener("click", function () {
-            bukaModal("modalLupa");
-        });
-
-        document.getElementById("tombolDaftar").addEventListener("click", function () {
-            bukaModal("modalDaftar");
-        });
-
+        // Pop-up
         function bukaModal(id) {
             document.getElementById(id).classList.add("show");
         }
@@ -517,6 +520,14 @@
         function tutupModal(id) {
             document.getElementById(id).classList.remove("show");
         }
+
+        document.getElementById("tombolLupa").addEventListener("click", function () {
+            bukaModal("modalLupa");
+        });
+
+        document.getElementById("tombolDaftar").addEventListener("click", function () {
+            bukaModal("modalDaftar");
+        });
 
         document.querySelectorAll("[data-tutup]").forEach(function (tombol) {
             tombol.addEventListener("click", function () {
@@ -532,31 +543,28 @@
             });
         });
 
-        // Simulasi fitur lupa password
+        // Simulasi lupa password
         document.getElementById("formLupa").addEventListener("submit", function (event) {
             event.preventDefault();
 
             const email = document.getElementById("emailLupa")
                 .value.trim().toLowerCase();
 
-            const pengguna = typeof dataPengguna !== "undefined"
-                ? dataPengguna.find(function (akun) {
-                    return akun.email.toLowerCase() === email;
-                })
-                : null;
+            const akun = penggunaData.find(function (pengguna) {
+                return String(pengguna.email).toLowerCase() === email;
+            });
 
-            document.getElementById("pesanLupa").textContent = pengguna
-                ? "Email terdaftar. Pemulihan password belum tersedia pada versi simulasi ini."
+            document.getElementById("pesanLupa").textContent = akun
+                ? "Email terdaftar. Fitur pemulihan password belum tersedia."
                 : "Email tidak ditemukan dalam data pengguna.";
-
         });
 
-        // Simulasi formulir pendaftaran
+        // Simulasi daftar akun
         document.getElementById("formDaftar").addEventListener("submit", function (event) {
             event.preventDefault();
 
             document.getElementById("pesanDaftar").textContent =
-                "Formulir berhasil diperiksa. Pendaftaran belum disimpan karena aplikasi belum menggunakan backend.";
+                "Formulir telah diperiksa, tetapi akun belum disimpan karena aplikasi belum menggunakan backend.";
         });
     </script>
 
