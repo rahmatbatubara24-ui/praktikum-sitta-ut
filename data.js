@@ -1,12 +1,10 @@
 ```javascript
-/* =====================================================
-   SITTA - DATA UTAMA APLIKASI
-   File: data.js
-   ===================================================== */
+// ==========================================
+// SITTA - DATA UTAMA
+// File: data.js
+// ==========================================
 
-
-/* ================= 1. DATA PENGGUNA ================= */
-
+// 1. DATA PENGGUNA
 window.dataPengguna = [
     {
         id: 1,
@@ -50,9 +48,7 @@ window.dataPengguna = [
     }
 ];
 
-
-/* ================= 2. DATA BAHAN AJAR ================= */
-
+// 2. DATA BAHAN AJAR
 window.dataBahanAjar = [
     {
         kodeLokasi: "0TMP01",
@@ -101,9 +97,7 @@ window.dataBahanAjar = [
     }
 ];
 
-
-/* ================= 3. DATA TRACKING ================= */
-
+// 3. DATA TRACKING
 window.dataTracking = {
     "2023001234": {
         nomorDO: "2023001234",
@@ -166,9 +160,7 @@ window.dataTracking = {
     }
 };
 
-
-/* ================= 4. DATA PEMESANAN ================= */
-
+// 4. DATA PEMESANAN
 window.dataPemesanan = {
     "2023001234": {
         nomorDO: "2023001234",
@@ -225,12 +217,6 @@ window.dataPemesanan = {
     }
 };
 
-
-/* ================= 5. PEMERIKSAAN DATA ================= */
-
-console.log("SITTA: data.js berhasil dimuat.");
-console.log("Jumlah pengguna:", dataPengguna.length);
-console.log("Jumlah bahan ajar:", dataBahanAjar.length);
-console.log("Jumlah data tracking:", Object.keys(dataTracking).length);
-console.log("Jumlah data pemesanan:", Object.keys(dataPemesanan).length);
+console.log("SITTA data.js berhasil dimuat.");
+console.log("Jumlah pengguna:", window.dataPengguna.length);
 ```
