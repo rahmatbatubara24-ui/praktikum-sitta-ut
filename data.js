@@ -7,7 +7,7 @@
 
 /* ================= 1. DATA PENGGUNA ================= */
 
-var dataPengguna = [
+window.dataPengguna = [
     {
         id: 1,
         nama: "Rina Wulandari",
@@ -53,7 +53,7 @@ var dataPengguna = [
 
 /* ================= 2. DATA BAHAN AJAR ================= */
 
-var dataBahanAjar = [
+window.dataBahanAjar = [
     {
         kodeLokasi: "0TMP01",
         kodeBarang: "ASIP4301",
@@ -104,7 +104,7 @@ var dataBahanAjar = [
 
 /* ================= 3. DATA TRACKING ================= */
 
-var dataTracking = {
+window.dataTracking = {
     "2023001234": {
         nomorDO: "2023001234",
         nama: "Rina Wulandari",
@@ -169,7 +169,7 @@ var dataTracking = {
 
 /* ================= 4. DATA PEMESANAN ================= */
 
-var dataPemesanan = {
+window.dataPemesanan = {
     "2023001234": {
         nomorDO: "2023001234",
         nama: "Rina Wulandari",
