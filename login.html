@@ -1,125 +1,390 @@
-
+```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Login SITTA - Universitas Terbuka</title>
-<style>
-*{box-sizing:border-box;font-family:Arial,sans-serif}
-body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#0b3b75,#147d92)}
-.card{display:grid;grid-template-columns:1fr 1fr;width:100%;max-width:850px;background:white;border-radius:18px;overflow:hidden;box-shadow:0 15px 40px #0003}
-.info{padding:40px;background:#0b3b75;color:white;display:flex;flex-direction:column;justify-content:center}
-.info h1{font-size:38px;margin:0 0 15px}
-.form-area{padding:40px}
-h2{color:#17365d;margin-top:0}
-label{display:block;font-size:14px;font-weight:bold;margin:18px 0 8px}
-input{width:100%;padding:13px;border:1px solid #ccd2dc;border-radius:8px;font-size:15px}
-button{cursor:pointer}
-.login{width:100%;padding:14px;margin-top:22px;border:0;border-radius:8px;background:#0b5cab;color:white;font-weight:bold;font-size:15px}
-.links{display:flex;justify-content:space-between;margin-top:20px}
-.links button{border:0;background:none;color:#0b5cab}
-.footer{margin-top:30px;border-top:1px solid #ddd;padding-top:16px;text-align:center;color:#667085;font-size:12px}
-#status{font-size:13px;line-height:1.5;margin-top:12px;color:#a33}
-@media(max-width:650px){.card{grid-template-columns:1fr}.info,.form-area{padding:25px}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login SITTA - Universitas Terbuka</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #123b70, #1976a8);
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+            padding: 35px;
+            border-radius: 16px;
+            background: #fff;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            width: 75px;
+            height: 75px;
+            margin: 0 auto 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            background: #e8f2ff;
+            color: #123b70;
+            font-size: 27px;
+            font-weight: bold;
+        }
+
+        h1 {
+            color: #123b70;
+            text-align: center;
+            font-size: 27px;
+            margin-bottom: 7px;
+        }
+
+        .subtitle {
+            color: #666;
+            text-align: center;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid #ccd4df;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #1976a8;
+            box-shadow: 0 0 0 3px rgba(25, 118, 168, 0.12);
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 75px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: #1976a8;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #123b70;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .login-button:hover {
+            background: #1976a8;
+        }
+
+        .login-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .message {
+            display: none;
+            padding: 11px;
+            border-radius: 7px;
+            margin-bottom: 16px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .message.error {
+            display: block;
+            color: #842029;
+            background: #f8d7da;
+        }
+
+        .message.success {
+            display: block;
+            color: #0f5132;
+            background: #d1e7dd;
+        }
+
+        .account-info {
+            margin-top: 22px;
+            padding: 13px;
+            border-radius: 8px;
+            background: #f3f6fa;
+            font-size: 12px;
+            color: #555;
+            line-height: 1.7;
+        }
+
+        .account-info strong {
+            color: #123b70;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 22px;
+            color: #777;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 25px 20px;
+            }
+        }
+    </style>
 </head>
+
 <body>
-<div class="card">
-  <section class="info">
-    <h1>SITTA</h1>
-    <p><strong>Sistem Informasi Tata Bahan Ajar</strong></p>
-    <p>Universitas Terbuka</p>
-    <p>Pengelolaan bahan ajar, pemesanan, dan pelacakan pengiriman.</p>
-  </section>
-  <section class="form-area">
-    <h2>Selamat Datang!</h2>
-    <p>Masuk menggunakan akun yang tersedia pada data aplikasi.</p>
-    <form id="formLogin">
-      <label for="email">Email</label>
-      <input id="email" type="email" autocomplete="username" required>
-      <label for="password">Password</label>
-      <input id="password" type="password" autocomplete="current-password" required>
-      <button class="login" id="tombolLogin" type="submit" disabled>Memuat data pengguna...</button>
-      <p id="status" role="status"></p>
-    </form>
-    <div class="links">
-      <button type="button" id="lupa">Lupa Password?</button>
-      <button type="button" id="daftar">Daftar Akun</button>
-    </div>
-    <div class="footer">SITTA · Universitas Terbuka<br>Aplikasi dibuat oleh <strong>Sumardi Hutabarat</strong></div>
-  </section>
-</div>
+    <main class="login-container">
+        <div class="logo">UT</div>
 
-<script>
-(function(){
-  const tombol = document.getElementById("tombolLogin");
-  const status = document.getElementById("status");
-  const form = document.getElementById("formLogin");
+        <h1>SITTA</h1>
 
-  // Muat data.js terlebih dahulu. Login baru diaktifkan setelah data ditemukan.
-  const sumber = document.createElement("script");
-  sumber.src = new URL("data.js", window.location.href).href;
+        <p class="subtitle">
+            Sistem Informasi Tiras dan Transaksi Bahan Ajar<br>
+            Universitas Terbuka
+        </p>
 
-  sumber.onload = function(){
-    if (Array.isArray(window.dataPengguna)) {
-      tombol.disabled = false;
-      tombol.textContent = "Login";
-      status.textContent = "Data pengguna berhasil dimuat.";
-      status.style.color = "green";
-    } else {
-      status.textContent = "File data.js terbuka, tetapi variabel dataPengguna tidak ditemukan.";
-      tombol.textContent = "Data tidak tersedia";
-    }
-  };
+        <div id="pesan" class="message" role="alert"></div>
 
-  sumber.onerror = function(){
-    status.textContent = "Gagal memuat data.js. Periksa apakah file data.js sudah dipublikasikan di GitHub/Vercel.";
-    tombol.textContent = "Data tidak tersedia";
-  };
+        <form id="formLogin">
+            <div class="form-group">
+                <label for="email">Email pengguna</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Masukkan email"
+                    autocomplete="username"
+                    required
+                >
+            </div>
 
-  document.head.appendChild(sumber);
+            <div class="form-group">
+                <label for="password">Password</label>
 
-  form.addEventListener("submit", function(e){
-    e.preventDefault();
+                <div class="password-wrapper">
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Masukkan password"
+                        autocomplete="current-password"
+                        required
+                    >
 
-    if (!Array.isArray(window.dataPengguna)) {
-      status.textContent = "Data pengguna belum berhasil dimuat.";
-      return;
-    }
+                    <button
+                        type="button"
+                        id="togglePassword"
+                        class="toggle-password"
+                    >
+                        Lihat
+                    </button>
+                </div>
+            </div>
 
-    const email = document.getElementById("email").value.trim().toLowerCase();
-    const password = document.getElementById("password").value;
+            <button
+                type="submit"
+                id="tombolLogin"
+                class="login-button"
+            >
+                Masuk ke SITTA
+            </button>
+        </form>
 
-    const akun = window.dataPengguna.find(function(u){
-      return String(u.email || "").trim().toLowerCase() === email &&
-             String(u.password || "") === password;
-    });
+        <div class="account-info">
+            <strong>Akun simulasi untuk pengujian</strong><br>
+            Rina: rina@ut.ac.id / rina123<br>
+            Agus: agus@ut.ac.id / agus123<br>
+            Admin: admin@ut.ac.id / admin123
+        </div>
 
-    if (!akun) {
-      status.textContent = "Email/password yang Anda masukkan salah.";
-      return;
-    }
+        <div class="footer">
+            SITTA — Sistem Informasi Bahan Ajar<br>
+            Universitas Terbuka
+        </div>
+    </main>
 
-    sessionStorage.setItem("sittaPenggunaAktif", JSON.stringify({
-      id: akun.id,
-      nama: akun.nama,
-      email: akun.email,
-      role: akun.role,
-      lokasi: akun.lokasi
-    }));
+    <!-- Data harus dimuat sebelum proses login -->
+    <script src="./data.js"></script>
 
-    window.location.replace("./index.html");
-  });
+    <script>
+        (function () {
+            "use strict";
 
-  document.getElementById("lupa").addEventListener("click", function(){
-    alert("Fitur pemulihan password belum tersedia.");
-  });
+            const formLogin = document.getElementById("formLogin");
+            const inputEmail = document.getElementById("email");
+            const inputPassword = document.getElementById("password");
+            const pesan = document.getElementById("pesan");
+            const tombolLogin = document.getElementById("tombolLogin");
+            const togglePassword = document.getElementById("togglePassword");
 
-  document.getElementById("daftar").addEventListener("click", function(){
-    alert("Pendaftaran akun belum tersedia pada versi ini.");
-  });
-})();
-</script>
+            function tampilkanPesan(teks, jenis) {
+                pesan.textContent = teks;
+                pesan.className = "message " + jenis;
+            }
+
+            // Pastikan data.js sudah berhasil dimuat.
+            function periksaDataPengguna() {
+                if (
+                    typeof window.dataPengguna === "undefined" ||
+                    !Array.isArray(window.dataPengguna)
+                ) {
+                    tampilkanPesan(
+                        "Data pengguna tidak berhasil dimuat. " +
+                        "Pastikan file data.js berada di folder yang sama " +
+                        "dengan login.html dan sudah tersimpan di GitHub.",
+                        "error"
+                    );
+
+                    tombolLogin.disabled = true;
+                    console.error(
+                        "dataPengguna tidak ditemukan. Periksa lokasi dan isi data.js."
+                    );
+                    return false;
+                }
+
+                if (window.dataPengguna.length === 0) {
+                    tampilkanPesan(
+                        "Data pengguna kosong. Periksa isi data.js.",
+                        "error"
+                    );
+                    tombolLogin.disabled = true;
+                    return false;
+                }
+
+                tombolLogin.disabled = false;
+                console.log(
+                    "Data pengguna berhasil dimuat:",
+                    window.dataPengguna.length
+                );
+                return true;
+            }
+
+            // Tampilkan/sembunyikan password.
+            togglePassword.addEventListener("click", function () {
+                const sedangTersembunyi =
+                    inputPassword.type === "password";
+
+                inputPassword.type = sedangTersembunyi
+                    ? "text"
+                    : "password";
+
+                togglePassword.textContent = sedangTersembunyi
+                    ? "Sembunyikan"
+                    : "Lihat";
+            });
+
+            // Proses login.
+            formLogin.addEventListener("submit", function (event) {
+                event.preventDefault();
+
+                if (!periksaDataPengguna()) {
+                    return;
+                }
+
+                const email = inputEmail.value.trim().toLowerCase();
+                const password = inputPassword.value;
+
+                const pengguna = window.dataPengguna.find(function (user) {
+                    return (
+                        String(user.email || "").trim().toLowerCase() === email &&
+                        String(user.password || "") === password
+                    );
+                });
+
+                if (!pengguna) {
+                    tampilkanPesan(
+                        "Email atau password salah. Silakan periksa kembali.",
+                        "error"
+                    );
+                    return;
+                }
+
+                // Simpan sesi dengan nama kunci yang digunakan dashboard.
+                const sesiPengguna = {
+                    id: pengguna.id,
+                    nama: pengguna.nama,
+                    email: pengguna.email,
+                    role: pengguna.role,
+                    lokasi: pengguna.lokasi
+                };
+
+                try {
+                    sessionStorage.setItem(
+                        "sittaPenggunaAktif",
+                        JSON.stringify(sesiPengguna)
+                    );
+                } catch (error) {
+                    tampilkanPesan(
+                        "Sesi login tidak dapat disimpan di browser. " +
+                        "Periksa pengaturan browser Anda.",
+                        "error"
+                    );
+                    console.error(error);
+                    return;
+                }
+
+                tampilkanPesan(
+                    "Login berhasil. Mengalihkan ke dashboard...",
+                    "success"
+                );
+
+                // Gunakan dashboard.html pada folder yang sama.
+                window.location.href = "./dashboard.html";
+            });
+
+            // Periksa data ketika halaman dibuka.
+            periksaDataPengguna();
+        })();
+    </script>
 </body>
 </html>
+```
