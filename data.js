@@ -1,11 +1,11 @@
 ```javascript
 /* =====================================================
-   SITTA - DATA APLIKASI
-   Data simulasi untuk praktikum
+   SITTA - DATA UTAMA APLIKASI
+   File: data.js
    ===================================================== */
 
 
-/* ================= DATA PENGGUNA ================= */
+/* ================= 1. DATA PENGGUNA ================= */
 
 var dataPengguna = [
     {
@@ -51,7 +51,7 @@ var dataPengguna = [
 ];
 
 
-/* ================= DATA BAHAN AJAR ================= */
+/* ================= 2. DATA BAHAN AJAR ================= */
 
 var dataBahanAjar = [
     {
@@ -102,7 +102,7 @@ var dataBahanAjar = [
 ];
 
 
-/* ================= DATA TRACKING PENGIRIMAN ================= */
+/* ================= 3. DATA TRACKING ================= */
 
 var dataTracking = {
     "2023001234": {
@@ -113,7 +113,6 @@ var dataTracking = {
         tanggalKirim: "2025-08-25",
         paket: "0JKT01",
         total: "Rp 180.000",
-
         perjalanan: [
             {
                 waktu: "2025-08-25 10:12:20",
@@ -138,7 +137,6 @@ var dataTracking = {
         tanggalKirim: "2025-08-25",
         paket: "0UPBJJBDG",
         total: "Rp 220.000",
-
         perjalanan: [
             {
                 waktu: "2025-08-25 10:12:20",
@@ -169,7 +167,7 @@ var dataTracking = {
 };
 
 
-/* ================= DATA PEMESANAN BAHAN AJAR ================= */
+/* ================= 4. DATA PEMESANAN ================= */
 
 var dataPemesanan = {
     "2023001234": {
@@ -179,7 +177,6 @@ var dataPemesanan = {
         lokasi: "UPBJJ Jakarta",
         tanggalPesan: "2025-08-24",
         statusPesanan: "Diproses",
-
         daftarPesanan: [
             {
                 kodeBarang: "ASIP4301",
@@ -196,7 +193,6 @@ var dataPemesanan = {
                 subtotal: 60000
             }
         ],
-
         totalItem: 3,
         totalPembayaran: 180000
     },
@@ -208,7 +204,6 @@ var dataPemesanan = {
         lokasi: "UPBJJ Bandung",
         tanggalPesan: "2025-08-24",
         statusPesanan: "Selesai Dikirim",
-
         daftarPesanan: [
             {
                 kodeBarang: "PAUD4401",
@@ -225,9 +220,17 @@ var dataPemesanan = {
                 subtotal: 60000
             }
         ],
-
         totalItem: 3,
         totalPembayaran: 220000
     }
 };
+
+
+/* ================= 5. PEMERIKSAAN DATA ================= */
+
+console.log("SITTA: data.js berhasil dimuat.");
+console.log("Jumlah pengguna:", dataPengguna.length);
+console.log("Jumlah bahan ajar:", dataBahanAjar.length);
+console.log("Jumlah data tracking:", Object.keys(dataTracking).length);
+console.log("Jumlah data pemesanan:", Object.keys(dataPemesanan).length);
 ```
