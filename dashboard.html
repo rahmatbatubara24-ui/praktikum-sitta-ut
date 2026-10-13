@@ -1,0 +1,637 @@
+```html
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard SITTA - Universitas Terbuka</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f6fb;
+            color: #243247;
+        }
+
+        header {
+            background: #123b68;
+            color: white;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        header h1 {
+            font-size: 23px;
+        }
+
+        header p {
+            margin-top: 6px;
+            font-size: 13px;
+            color: #dce8f7;
+        }
+
+        .logout {
+            border: 1px solid white;
+            color: white;
+            background: transparent;
+            border-radius: 7px;
+            padding: 10px 16px;
+            cursor: pointer;
+        }
+
+        .logout:hover {
+            background: white;
+            color: #123b68;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 28px auto;
+            padding: 0 20px 35px;
+        }
+
+        .welcome {
+            background: linear-gradient(120deg, #174d83, #2878b9);
+            color: white;
+            padding: 27px;
+            border-radius: 14px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px #173b6618;
+        }
+
+        .welcome h2 {
+            font-size: 25px;
+            margin-bottom: 10px;
+        }
+
+        .welcome p {
+            line-height: 1.6;
+        }
+
+        .section-title {
+            margin: 25px 0 15px;
+            font-size: 20px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .menu-card {
+            display: block;
+            background: white;
+            padding: 22px;
+            min-height: 130px;
+            border-radius: 12px;
+            border: 1px solid #e4eaf2;
+            text-decoration: none;
+            color: #243247;
+            transition: 0.2s;
+            box-shadow: 0 3px 10px #173b6608;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-3px);
+            border-color: #2878b9;
+            box-shadow: 0 7px 18px #173b6615;
+        }
+
+        .menu-icon {
+            font-size: 27px;
+            margin-bottom: 13px;
+        }
+
+        .menu-card h3 {
+            color: #174d83;
+            font-size: 16px;
+            margin-bottom: 7px;
+        }
+
+        .menu-card p {
+            font-size: 13px;
+            line-height: 1.5;
+            color: #68778b;
+        }
+
+        .tracking-box {
+            margin-top: 28px;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #e4eaf2;
+            box-shadow: 0 3px 10px #173b6608;
+        }
+
+        .tracking-box h2 {
+            font-size: 21px;
+            margin-bottom: 8px;
+        }
+
+        .tracking-box .description {
+            color: #68778b;
+            font-size: 14px;
+            margin-bottom: 18px;
+            line-height: 1.6;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-form input {
+            flex: 1;
+            min-width: 0;
+            padding: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        .search-form button {
+            background: #1765a5;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            padding: 0 24px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .search-form button:hover {
+            background: #104c80;
+        }
+
+        .message {
+            padding: 14px;
+            background: #f8fafc;
+            border-radius: 7px;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .result {
+            display: none;
+            margin-top: 18px;
+        }
+
+        .result-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .progress-track {
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 12px 0 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0;
+            background: #16a34a;
+            border-radius: 20px;
+            transition: width 0.4s;
+        }
+
+        .progress-caption {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 22px;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .detail-item {
+            padding: 15px;
+            border-radius: 8px;
+            background: #f6f8fc;
+            overflow-wrap: anywhere;
+        }
+
+        .detail-item .label {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 7px;
+        }
+
+        .detail-item .value {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .history {
+            margin-top: 24px;
+        }
+
+        .history h3 {
+            font-size: 17px;
+            margin-bottom: 15px;
+        }
+
+        .history-item {
+            border-left: 3px solid #2878b9;
+            padding: 2px 0 17px 15px;
+            margin-left: 5px;
+        }
+
+        .history-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .history-time {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 5px;
+        }
+
+        .history-text {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        footer {
+            text-align: center;
+            padding: 22px 15px;
+            color: #7b8798;
+            font-size: 12px;
+        }
+
+        @media (max-width: 800px) {
+            .menu-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 520px) {
+            header h1 {
+                font-size: 19px;
+            }
+
+            main {
+                margin-top: 18px;
+                padding: 0 13px 25px;
+            }
+
+            .welcome {
+                padding: 21px;
+            }
+
+            .welcome h2 {
+                font-size: 21px;
+            }
+
+            .menu-grid,
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-form {
+                flex-direction: column;
+            }
+
+            .search-form button {
+                padding: 13px;
+            }
+
+            .tracking-box {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div>
+            <h1>SITTA | Universitas Terbuka</h1>
+            <p>Sistem Informasi Tiras dan Transaksi Bahan Ajar</p>
+        </div>
+        <button class="logout" id="logoutButton" type="button">
+            Keluar
+        </button>
+    </header>
+
+    <main>
+        <section class="welcome">
+            <h2 id="greeting">Selamat datang!</h2>
+            <p id="userInfo">Selamat menggunakan aplikasi SITTA.</p>
+            <p id="dateInfo"></p>
+        </section>
+
+        <h2 class="section-title">Menu Utama</h2>
+
+        <section class="menu-grid">
+            <a class="menu-card" href="stok.html">
+                <div class="menu-icon">📚</div>
+                <h3>Informasi Bahan Ajar</h3>
+                <p>Melihat informasi dan ketersediaan stok bahan ajar.</p>
+            </a>
+
+            <a class="menu-card" href="#tracking">
+                <div class="menu-icon">📦</div>
+                <h3>Tracking Pengiriman</h3>
+                <p>Mencari status pengiriman berdasarkan nomor DO.</p>
+            </a>
+
+            <a class="menu-card" href="laporan.html">
+                <div class="menu-icon">📊</div>
+                <h3>Laporan</h3>
+                <p>Menu untuk melihat laporan transaksi bahan ajar.</p>
+            </a>
+
+            <a class="menu-card" href="monitoring.html">
+                <div class="menu-icon">🚚</div>
+                <h3>Monitoring Progress DO</h3>
+                <p>Memantau perkembangan pengiriman Delivery Order.</p>
+            </a>
+
+            <a class="menu-card" href="rekap.html">
+                <div class="menu-icon">🗂️</div>
+                <h3>Rekap Bahan Ajar</h3>
+                <p>Menu rekapitulasi data bahan ajar.</p>
+            </a>
+
+            <a class="menu-card" href="histori.html">
+                <div class="menu-icon">🕘</div>
+                <h3>Histori Transaksi</h3>
+                <p>Menu untuk melihat riwayat transaksi bahan ajar.</p>
+            </a>
+        </section>
+
+        <section class="tracking-box" id="tracking">
+            <h2>Tracking Pengiriman Bahan Ajar</h2>
+            <p class="description">
+                Masukkan nomor Delivery Order (DO), lalu tekan Cari untuk
+                melihat status dan detail pengiriman.
+            </p>
+
+            <form class="search-form" id="trackingForm">
+                <input
+                    type="text"
+                    id="nomorDO"
+                    placeholder="Contoh: 2023001234"
+                    aria-label="Nomor Delivery Order"
+                    required
+                >
+                <button type="submit">Cari</button>
+            </form>
+
+            <div class="message" id="message">
+                Silakan masukkan nomor DO untuk mencari data pengiriman.
+            </div>
+
+            <div class="result" id="result">
+                <div class="result-heading">
+                    <div>
+                        <h3 id="resultDO">Nomor DO</h3>
+                        <p id="resultName" style="margin-top: 7px;"></p>
+                    </div>
+                    <span class="status" id="resultStatus"></span>
+                </div>
+
+                <p style="font-size: 14px;">Progress pengiriman</p>
+                <div class="progress-track">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <p class="progress-caption" id="progressCaption"></p>
+
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <div class="label">Nama Mahasiswa</div>
+                        <div class="value" id="detailNama"></div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="label">Ekspedisi</div>
+                        <div class="value" id="detailEkspedisi"></div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="label">Tanggal Kirim</div>
+                        <div class="value" id="detailTanggal"></div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="label">Jenis Paket / Kode Lokasi</div>
+                        <div class="value" id="detailPaket"></div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="label">Total Pembayaran</div>
+                        <div class="value" id="detailTotal"></div>
+                    </div>
+                </div>
+
+                <div class="history">
+                    <h3>Riwayat Perjalanan</h3>
+                    <div id="historyList"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        SITTA — Sistem Informasi Tiras dan Transaksi Bahan Ajar
+    </footer>
+
+    <!-- Data pengguna dan tracking diambil dari data.js -->
+    <script src="./data.js"></script>
+
+    <script>
+        // Periksa sesi login
+        const sesiPengguna = sessionStorage.getItem("sittaPenggunaAktif");
+
+        if (!sesiPengguna) {
+            window.location.replace("./login.html");
+        }
+
+        let penggunaAktif = null;
+
+        try {
+            penggunaAktif = JSON.parse(sesiPengguna || "null");
+        } catch (error) {
+            penggunaAktif = null;
+        }
+
+        // Greeting berdasarkan waktu lokal perangkat
+        function tampilkanGreeting() {
+            const jam = new Date().getHours();
+            let sapaan = "Selamat malam";
+
+            if (jam >= 4 && jam < 11) {
+                sapaan = "Selamat pagi";
+            } else if (jam >= 11 && jam < 15) {
+                sapaan = "Selamat siang";
+            } else if (jam >= 15 && jam < 18) {
+                sapaan = "Selamat sore";
+            }
+
+            const nama = penggunaAktif && penggunaAktif.nama
+                ? penggunaAktif.nama
+                : "Pengguna SITTA";
+
+            document.getElementById("greeting").textContent =
+                sapaan + ", " + nama + "!";
+
+            document.getElementById("userInfo").textContent =
+                "Selamat datang di Dashboard SITTA Universitas Terbuka.";
+
+            document.getElementById("dateInfo").textContent =
+                new Date().toLocaleDateString("id-ID", {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
+                });
+        }
+
+        tampilkanGreeting();
+
+        // Keluar dari aplikasi
+        document.getElementById("logoutButton").addEventListener("click", function () {
+            sessionStorage.removeItem("sittaPenggunaAktif");
+            window.location.replace("./login.html");
+        });
+
+        // Cari dan tampilkan data tracking
+        document.getElementById("trackingForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const nomor = document.getElementById("nomorDO").value.trim();
+            const message = document.getElementById("message");
+            const result = document.getElementById("result");
+
+            result.style.display = "none";
+            message.style.display = "block";
+
+            if (!nomor) {
+                message.textContent = "Silakan masukkan nomor DO terlebih dahulu.";
+                return;
+            }
+
+            if (typeof dataTracking === "undefined") {
+                message.textContent =
+                    "Data tracking tidak ditemukan. Periksa isi file data.js.";
+                return;
+            }
+
+            const data = dataTracking[nomor];
+
+            if (!data) {
+                message.textContent =
+                    "Nomor DO " + nomor +
+                    " tidak ditemukan. Periksa kembali nomor yang dimasukkan.";
+                return;
+            }
+
+            const riwayat = Array.isArray(data.perjalanan)
+                ? data.perjalanan
+                : [];
+
+            const statusLower = String(data.status || "").toLowerCase();
+            let progress = 25;
+
+            if (statusLower.includes("perjalanan")) {
+                progress = 60;
+            } else if (
+                statusLower.includes("dikirim") ||
+                statusLower.includes("selesai") ||
+                statusLower.includes("diterima")
+            ) {
+                progress = 100;
+            }
+
+            document.getElementById("resultDO").textContent =
+                "Nomor DO: " + (data.nomorDO || nomor);
+
+            document.getElementById("resultName").textContent =
+                "Nama mahasiswa: " + (data.nama || "-");
+
+            document.getElementById("resultStatus").textContent =
+                data.status || "Status tidak tersedia";
+
+            document.getElementById("progressFill").style.width =
+                progress + "%";
+
+            document.getElementById("progressCaption").textContent =
+                progress + "% — " + (data.status || "Status tidak tersedia");
+
+            document.getElementById("detailNama").textContent =
+                data.nama || "-";
+
+            document.getElementById("detailEkspedisi").textContent =
+                data.ekspedisi || "-";
+
+            document.getElementById("detailTanggal").textContent =
+                data.tanggalKirim || "-";
+
+            document.getElementById("detailPaket").textContent =
+                data.paket || "-";
+
+            document.getElementById("detailTotal").textContent =
+                data.total || "-";
+
+            const historyList = document.getElementById("historyList");
+            historyList.replaceChildren();
+
+            if (riwayat.length === 0) {
+                const kosong = document.createElement("p");
+                kosong.className = "message";
+                kosong.textContent = "Belum ada riwayat perjalanan.";
+                historyList.appendChild(kosong);
+            } else {
+                riwayat.forEach(function (item) {
+                    const baris = document.createElement("div");
+                    baris.className = "history-item";
+
+                    const waktu = document.createElement("div");
+                    waktu.className = "history-time";
+                    waktu.textContent = item.waktu || "-";
+
+                    const keterangan = document.createElement("div");
+                    keterangan.className = "history-text";
+                    keterangan.textContent = item.keterangan || "-";
+
+                    baris.appendChild(waktu);
+                    baris.appendChild(keterangan);
+                    historyList.appendChild(baris);
+                });
+            }
+
+            message.style.display = "none";
+            result.style.display = "block";
+        });
+    </script>
+</body>
+</html>
+```
