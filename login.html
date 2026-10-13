@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login SITTA - Universitas Terbuka</title>
+
+    <title>Login SITTA | Universitas Terbuka</title>
 
     <style>
         * {
@@ -17,25 +18,25 @@
             font-family: Arial, Helvetica, sans-serif;
             min-height: 100vh;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             padding: 20px;
             background: linear-gradient(135deg, #123b70, #1976a8);
         }
 
         .login-container {
             width: 100%;
-            max-width: 420px;
+            max-width: 410px;
+            background: #ffffff;
             padding: 35px;
             border-radius: 16px;
-            background: #fff;
             box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
         }
 
         .logo {
             width: 75px;
             height: 75px;
-            margin: 0 auto 15px;
+            margin: 0 auto 16px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -49,33 +50,33 @@
         h1 {
             color: #123b70;
             text-align: center;
-            font-size: 27px;
-            margin-bottom: 7px;
+            font-size: 28px;
+            margin-bottom: 8px;
         }
 
         .subtitle {
-            color: #666;
             text-align: center;
-            font-size: 14px;
-            line-height: 1.5;
-            margin-bottom: 25px;
+            color: #666666;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 28px;
         }
 
         .form-group {
-            margin-bottom: 17px;
+            margin-bottom: 19px;
         }
 
         label {
             display: block;
-            margin-bottom: 7px;
+            margin-bottom: 8px;
+            color: #333333;
             font-size: 14px;
             font-weight: bold;
-            color: #333;
         }
 
         input {
             width: 100%;
-            padding: 12px 13px;
+            padding: 13px;
             border: 1px solid #ccd4df;
             border-radius: 8px;
             font-size: 15px;
@@ -92,7 +93,7 @@
         }
 
         .password-wrapper input {
-            padding-right: 75px;
+            padding-right: 80px;
         }
 
         .toggle-password {
@@ -111,6 +112,7 @@
         .login-button {
             width: 100%;
             padding: 13px;
+            margin-top: 5px;
             border: none;
             border-radius: 8px;
             background: #123b70;
@@ -118,7 +120,7 @@
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 5px;
+            transition: background 0.2s;
         }
 
         .login-button:hover {
@@ -126,15 +128,15 @@
         }
 
         .login-button:disabled {
-            opacity: 0.6;
+            background: #8996a8;
             cursor: not-allowed;
         }
 
         .message {
             display: none;
-            padding: 11px;
-            border-radius: 7px;
-            margin-bottom: 16px;
+            padding: 12px;
+            margin-bottom: 18px;
+            border-radius: 8px;
             font-size: 13px;
             line-height: 1.5;
         }
@@ -151,52 +153,48 @@
             background: #d1e7dd;
         }
 
-        .account-info {
-            margin-top: 22px;
-            padding: 13px;
-            border-radius: 8px;
-            background: #f3f6fa;
-            font-size: 12px;
-            color: #555;
-            line-height: 1.7;
-        }
-
-        .account-info strong {
-            color: #123b70;
-        }
-
         .footer {
+            margin-top: 25px;
             text-align: center;
-            margin-top: 22px;
-            color: #777;
+            color: #777777;
             font-size: 12px;
-            line-height: 1.6;
+            line-height: 1.7;
         }
 
         @media (max-width: 480px) {
             .login-container {
-                padding: 25px 20px;
+                padding: 26px 21px;
             }
         }
     </style>
 </head>
 
 <body>
+
     <main class="login-container">
+
         <div class="logo">UT</div>
 
         <h1>SITTA</h1>
 
         <p class="subtitle">
-            Sistem Informasi Tiras dan Transaksi Bahan Ajar<br>
+            Sistem Informasi Tiras dan Transaksi Bahan Ajar
+            <br>
             Universitas Terbuka
         </p>
 
-        <div id="pesan" class="message" role="alert"></div>
+        <div
+            id="pesan"
+            class="message"
+            role="alert"
+            aria-live="polite"
+        ></div>
 
         <form id="formLogin">
+
             <div class="form-group">
-                <label for="email">Email pengguna</label>
+                <label for="email">Email</label>
+
                 <input
                     type="email"
                     id="email"
@@ -235,24 +233,20 @@
                 id="tombolLogin"
                 class="login-button"
             >
-                Masuk ke SITTA
+                Masuk
             </button>
+
         </form>
 
-        <div class="account-info">
-            <strong>Akun simulasi untuk pengujian</strong><br>
-            Rina: rina@ut.ac.id / rina123<br>
-            Agus: agus@ut.ac.id / agus123<br>
-            Admin: admin@ut.ac.id / admin123
+        <div class="footer">
+            SITTA — Universitas Terbuka
+            <br>
+            Sistem Informasi Bahan Ajar
         </div>
 
-        <div class="footer">
-            SITTA — Sistem Informasi Bahan Ajar<br>
-            Universitas Terbuka
-        </div>
     </main>
 
-    <!-- Data harus dimuat sebelum proses login -->
+    <!-- Muat data sebelum menjalankan proses login -->
     <script src="./data.js"></script>
 
     <script>
@@ -262,8 +256,8 @@
             const formLogin = document.getElementById("formLogin");
             const inputEmail = document.getElementById("email");
             const inputPassword = document.getElementById("password");
-            const pesan = document.getElementById("pesan");
             const tombolLogin = document.getElementById("tombolLogin");
+            const pesan = document.getElementById("pesan");
             const togglePassword = document.getElementById("togglePassword");
 
             function tampilkanPesan(teks, jenis) {
@@ -271,69 +265,79 @@
                 pesan.className = "message " + jenis;
             }
 
-            // Pastikan data.js sudah berhasil dimuat.
-            function periksaDataPengguna() {
+            /*
+             * Memastikan data pengguna tersedia.
+             * Mendukung deklarasi var dataPengguna maupun
+             * window.dataPengguna pada data.js.
+             */
+            function ambilDataPengguna() {
                 if (
-                    typeof window.dataPengguna === "undefined" ||
-                    !Array.isArray(window.dataPengguna)
+                    typeof window.dataPengguna !== "undefined" &&
+                    Array.isArray(window.dataPengguna)
                 ) {
-                    tampilkanPesan(
-                        "Data pengguna tidak berhasil dimuat. " +
-                        "Pastikan file data.js berada di folder yang sama " +
-                        "dengan login.html dan sudah tersimpan di GitHub.",
-                        "error"
-                    );
-
-                    tombolLogin.disabled = true;
-                    console.error(
-                        "dataPengguna tidak ditemukan. Periksa lokasi dan isi data.js."
-                    );
-                    return false;
+                    return window.dataPengguna;
                 }
 
-                if (window.dataPengguna.length === 0) {
+                if (
+                    typeof dataPengguna !== "undefined" &&
+                    Array.isArray(dataPengguna)
+                ) {
+                    return dataPengguna;
+                }
+
+                return null;
+            }
+
+            function periksaData() {
+                const pengguna = ambilDataPengguna();
+
+                if (!pengguna || pengguna.length === 0) {
+                    tombolLogin.disabled = true;
+
                     tampilkanPesan(
-                        "Data pengguna kosong. Periksa isi data.js.",
+                        "Layanan login belum tersedia. Silakan coba kembali nanti.",
                         "error"
                     );
-                    tombolLogin.disabled = true;
+
+                    console.error(
+                        "Data pengguna tidak tersedia. Periksa data.js dan lokasi file."
+                    );
+
                     return false;
                 }
 
                 tombolLogin.disabled = false;
-                console.log(
-                    "Data pengguna berhasil dimuat:",
-                    window.dataPengguna.length
-                );
+                pesan.className = "message";
+
                 return true;
             }
 
-            // Tampilkan/sembunyikan password.
             togglePassword.addEventListener("click", function () {
-                const sedangTersembunyi =
-                    inputPassword.type === "password";
+                const sembunyi = inputPassword.type === "password";
 
-                inputPassword.type = sedangTersembunyi
+                inputPassword.type = sembunyi
                     ? "text"
                     : "password";
 
-                togglePassword.textContent = sedangTersembunyi
+                togglePassword.textContent = sembunyi
                     ? "Sembunyikan"
                     : "Lihat";
             });
 
-            // Proses login.
             formLogin.addEventListener("submit", function (event) {
                 event.preventDefault();
 
-                if (!periksaDataPengguna()) {
+                const daftarPengguna = ambilDataPengguna();
+
+                if (!daftarPengguna || daftarPengguna.length === 0) {
+                    periksaData();
                     return;
                 }
 
                 const email = inputEmail.value.trim().toLowerCase();
                 const password = inputPassword.value;
 
-                const pengguna = window.dataPengguna.find(function (user) {
+                const pengguna = daftarPengguna.find(function (user) {
                     return (
                         String(user.email || "").trim().toLowerCase() === email &&
                         String(user.password || "") === password
@@ -342,13 +346,12 @@
 
                 if (!pengguna) {
                     tampilkanPesan(
-                        "Email atau password salah. Silakan periksa kembali.",
+                        "Email atau password tidak sesuai.",
                         "error"
                     );
                     return;
                 }
 
-                // Simpan sesi dengan nama kunci yang digunakan dashboard.
                 const sesiPengguna = {
                     id: pengguna.id,
                     nama: pengguna.nama,
@@ -364,27 +367,26 @@
                     );
                 } catch (error) {
                     tampilkanPesan(
-                        "Sesi login tidak dapat disimpan di browser. " +
-                        "Periksa pengaturan browser Anda.",
+                        "Tidak dapat memulai sesi login. Silakan coba kembali.",
                         "error"
                     );
-                    console.error(error);
+
+                    console.error("Gagal menyimpan sesi:", error);
                     return;
                 }
 
                 tampilkanPesan(
-                    "Login berhasil. Mengalihkan ke dashboard...",
+                    "Login berhasil. Membuka dashboard...",
                     "success"
                 );
 
-                // Gunakan dashboard.html pada folder yang sama.
                 window.location.href = "./dashboard.html";
             });
 
-            // Periksa data ketika halaman dibuka.
-            periksaDataPengguna();
+            periksaData();
         })();
     </script>
+
 </body>
 </html>
 ```
