@@ -1,13 +1,47 @@
-
+```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>SITTA - Sistem Informasi Tata Bahan Ajar</title>
     <meta name="description" content="Sistem Informasi Tata Bahan Ajar Universitas Terbuka">
+
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Perbaikan navigasi dan tampilan halaman */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: sittaFade 0.25s ease;
+        }
+
+        nav .nav-btn {
+            cursor: pointer;
+        }
+
+        #notifikasi:not([hidden]) {
+            display: block;
+        }
+
+        @keyframes sittaFade {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
+
 <body>
 
 <header class="header">
@@ -19,16 +53,36 @@
         </div>
     </div>
 
-    <nav>
-        <button class="nav-btn active" data-page="dashboard">Dashboard</button>
-        <button class="nav-btn" data-page="katalog">Katalog Bahan Ajar</button>
-        <button class="nav-btn" data-page="tracking">Tracking</button>
-        <button class="nav-btn" data-page="pemesanan">Pemesanan</button>
+    <nav aria-label="Navigasi utama">
+        <button type="button" class="nav-btn active"
+            data-page="dashboard"
+            onclick="if(window.bukaHalaman){window.bukaHalaman('dashboard')}else{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('dashboard').classList.add('active')}">
+            Dashboard
+        </button>
+
+        <button type="button" class="nav-btn"
+            data-page="katalog"
+            onclick="if(window.bukaHalaman){window.bukaHalaman('katalog')}else{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('katalog').classList.add('active')}">
+            Katalog Bahan Ajar
+        </button>
+
+        <button type="button" class="nav-btn"
+            data-page="tracking"
+            onclick="if(window.bukaHalaman){window.bukaHalaman('tracking')}else{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('tracking').classList.add('active')}">
+            Tracking
+        </button>
+
+        <button type="button" class="nav-btn"
+            data-page="pemesanan"
+            onclick="if(window.bukaHalaman){window.bukaHalaman('pemesanan')}else{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('pemesanan').classList.add('active')}">
+            Pemesanan
+        </button>
     </nav>
 </header>
 
 <main class="container">
 
+    <!-- DASHBOARD -->
     <section id="dashboard" class="page active">
         <div class="welcome">
             <span class="badge">SISTEM INFORMASI UNIVERSITAS TERBUKA</span>
@@ -43,7 +97,8 @@
                     Temukan bahan ajar, periksa ketersediaan stok,
                     dan lihat informasi pengiriman dengan mudah.
                 </p>
-                <button class="primary-btn" data-go="katalog">
+                <button type="button" class="primary-btn"
+                    onclick="if(window.bukaHalaman){window.bukaHalaman('katalog')}else{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('katalog').classList.add('active')}">
                     Lihat Katalog
                 </button>
             </div>
@@ -74,17 +129,16 @@
         </div>
     </section>
 
+    <!-- KATALOG -->
     <section id="katalog" class="page">
         <div class="page-heading">
             <span class="badge">DATA BAHAN AJAR</span>
             <h1>Katalog Bahan Ajar</h1>
-            <p>Cari bahan ajar berdasarkan nama, kode barang, atau lokasi.</p>
+            <p>Cari bahan ajar berdasarkan nama, kode barang, atau penulis.</p>
         </div>
 
         <div class="toolbar">
-            <input
-                type="search"
-                id="cariBuku"
+            <input type="search" id="cariBuku"
                 placeholder="Cari nama atau kode bahan ajar..."
                 aria-label="Cari bahan ajar">
 
@@ -102,13 +156,13 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Kode Barang</th>
+                        <th>Kode Bahan Ajar</th>
                         <th>Nama Bahan Ajar</th>
-                        <th>Kode Lokasi</th>
-                        <th>Jenis</th>
-                        <th>Edisi</th>
+                        <th>Penulis</th>
+                        <th>Harga</th>
                         <th>Stok</th>
                         <th>Status</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="tabelBuku">
@@ -120,33 +174,33 @@
         </div>
     </section>
 
+    <!-- TRACKING -->
     <section id="tracking" class="page">
         <div class="page-heading">
-            <span class="badge">PELACAKAN PENGIRIMAN</span>
+            <span class="badge">PELACAKAN PESANAN</span>
             <h1>Tracking Bahan Ajar</h1>
-            <p>Masukkan nomor DO untuk melihat status dan riwayat pengiriman.</p>
+            <p>Masukkan nomor pesanan untuk memeriksa statusnya.</p>
         </div>
 
         <div class="panel">
             <form id="formTracking">
-                <label for="nomorDO">Nomor Delivery Order (DO)</label>
+                <label for="nomorDO">Nomor Pesanan</label>
                 <div class="input-row">
-                    <input
-                        type="text"
-                        id="nomorDO"
-                        placeholder="Contoh: 2023001234"
+                    <input type="text" id="nomorDO"
+                        placeholder="Masukkan nomor pesanan"
                         required>
                     <button type="submit" class="primary-btn">
-                        Lacak Pengiriman
+                        Periksa Status
                     </button>
                 </div>
-                <small>Gunakan nomor DO yang terdaftar pada data praktikum.</small>
+                <small>Gunakan nomor pesanan yang diperoleh setelah pemesanan berhasil.</small>
             </form>
         </div>
 
         <div id="hasilTracking"></div>
     </section>
 
+    <!-- PEMESANAN -->
     <section id="pemesanan" class="page">
         <div class="page-heading">
             <span class="badge">LAYANAN PEMESANAN</span>
@@ -159,9 +213,7 @@
                 <div class="form-grid">
                     <div>
                         <label for="namaPemesan">Nama Pemesan</label>
-                        <input
-                            type="text"
-                            id="namaPemesan"
+                        <input type="text" id="namaPemesan"
                             maxlength="100"
                             placeholder="Masukkan nama lengkap"
                             required>
@@ -169,9 +221,7 @@
 
                     <div>
                         <label for="emailPemesan">Email</label>
-                        <input
-                            type="email"
-                            id="emailPemesan"
+                        <input type="email" id="emailPemesan"
                             maxlength="254"
                             placeholder="nama@email.com"
                             required>
@@ -186,26 +236,19 @@
 
                     <div>
                         <label for="jumlahBuku">Jumlah Pesanan</label>
-                        <input
-                            type="number"
-                            id="jumlahBuku"
-                            min="1"
-                            step="1"
-                            value="1"
-                            required>
+                        <input type="number" id="jumlahBuku"
+                            min="1" step="1" value="1" required>
                     </div>
                 </div>
 
                 <label for="catatan">Catatan (opsional)</label>
-                <textarea
-                    id="catatan"
-                    rows="3"
-                    maxlength="500"
+                <textarea id="catatan" rows="3" maxlength="500"
                     placeholder="Tambahkan catatan jika diperlukan"></textarea>
 
                 <button type="submit" class="primary-btn">
                     Simpan Pesanan
                 </button>
+
                 <button type="reset" class="secondary-btn">
                     Reset Formulir
                 </button>
@@ -222,17 +265,17 @@
 
 </main>
 
-<div id="notifikasi" role="status" aria-live="polite"></div>
+<div id="notifikasi" role="status" aria-live="polite" hidden></div>
 
 <footer>
     <strong>SITTA — Universitas Terbuka</strong>
     <p>Sistem Informasi Tata Bahan Ajar | Aplikasi Praktikum STSI4209</p>
 </footer>
 
-<!-- Pustaka Supabase -->
+<!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<!-- Konfigurasi koneksi Supabase -->
+<!-- Konfigurasi Supabase yang digunakan saat ini -->
 <script>
     window.sittaSupabaseConfig = {
         url: "https://ajculvskijensjiessxf.supabase.co",
@@ -240,9 +283,34 @@
     };
 </script>
 
-<!-- File JavaScript aplikasi -->
 <script src="data.js"></script>
 <script src="script.js"></script>
+
+<!-- Menjaga navigasi tetap dapat berpindah halaman -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".nav-btn").forEach(function (tombol) {
+            tombol.addEventListener("click", function () {
+                var id = tombol.getAttribute("data-page");
+                var halaman = document.getElementById(id);
+
+                if (!halaman) return;
+
+                document.querySelectorAll(".page").forEach(function (item) {
+                    item.classList.remove("active");
+                });
+
+                halaman.classList.add("active");
+
+                document.querySelectorAll(".nav-btn").forEach(function (item) {
+                    item.classList.toggle("active", item === tombol);
+                });
+
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            });
+        });
+    });
+</script>
 
 </body>
 </html>
