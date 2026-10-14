@@ -3,8 +3,8 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Informasi Bahan Ajar | SITTA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Informasi Bahan Ajar - SITTA</title>
 
   <style>
     * {
@@ -13,52 +13,51 @@
 
     body {
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: Arial, sans-serif;
       background: #f1f5f9;
       color: #1e293b;
     }
 
     header {
+      padding: 24px 5%;
       background: #0f766e;
       color: white;
-      padding: 22px 5%;
     }
 
     header h1 {
       margin: 0 0 8px;
-      font-size: 25px;
+      font-size: 26px;
     }
 
     header p {
       margin: 0;
       font-size: 14px;
-      opacity: 0.9;
     }
 
-    .container {
-      width: min(1200px, 92%);
-      margin: 25px auto;
+    main {
+      width: 94%;
+      max-width: 1250px;
+      margin: 24px auto;
     }
 
     .toolbar {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: 12px;
+      justify-content: space-between;
       flex-wrap: wrap;
+      gap: 12px;
       margin-bottom: 20px;
     }
 
     .btn {
       display: inline-block;
-      padding: 11px 16px;
+      padding: 12px 16px;
       border: none;
       border-radius: 8px;
       background: #0f766e;
       color: white;
       text-decoration: none;
       cursor: pointer;
-      font-size: 14px;
       font-weight: bold;
     }
 
@@ -66,70 +65,68 @@
       background: #115e59;
     }
 
-    .search {
+    #pencarian {
       flex: 1;
-      min-width: 220px;
-      max-width: 450px;
+      min-width: 240px;
+      max-width: 480px;
       padding: 12px 14px;
       border: 1px solid #cbd5e1;
       border-radius: 8px;
       font-size: 15px;
-      background: white;
     }
 
-    .cards {
+    .ringkasan {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
       gap: 16px;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
     }
 
-    .card {
-      background: white;
+    .kartu {
       padding: 20px;
       border-radius: 12px;
-      box-shadow: 0 3px 12px rgba(15, 23, 42, 0.06);
+      background: white;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, .06);
     }
 
-    .card .label {
+    .kartu p {
+      margin: 0 0 10px;
       color: #64748b;
-      font-size: 13px;
-      margin-bottom: 10px;
+      font-size: 14px;
     }
 
-    .card .number {
+    .angka {
       color: #0f766e;
       font-size: 28px;
       font-weight: bold;
-      overflow-wrap: anywhere;
     }
 
-    .table-box {
-      background: white;
-      border-radius: 12px;
+    .panel {
       padding: 20px;
-      box-shadow: 0 3px 12px rgba(15, 23, 42, 0.06);
+      border-radius: 12px;
+      background: white;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, .06);
     }
 
-    .table-box h2 {
+    .panel h2 {
       margin-top: 0;
-      font-size: 19px;
+      font-size: 20px;
     }
 
-    .table-scroll {
+    .table-wrap {
       overflow-x: auto;
     }
 
     table {
       width: 100%;
+      min-width: 950px;
       border-collapse: collapse;
-      min-width: 650px;
     }
 
     th, td {
       padding: 13px 12px;
-      text-align: left;
       border-bottom: 1px solid #e2e8f0;
+      text-align: left;
       font-size: 14px;
     }
 
@@ -143,20 +140,19 @@
       background: #f8fafc;
     }
 
-    .badge {
+    .stok {
       display: inline-block;
-      padding: 5px 9px;
+      padding: 5px 10px;
       border-radius: 20px;
       background: #ccfbf1;
       color: #115e59;
-      font-size: 12px;
       font-weight: bold;
     }
 
-    .empty {
+    .kosong {
+      padding: 24px;
       text-align: center;
       color: #64748b;
-      padding: 25px;
     }
 
     #pesan {
@@ -166,14 +162,13 @@
       border-radius: 8px;
       background: #fee2e2;
       color: #991b1b;
-      line-height: 1.5;
     }
 
     footer {
       margin-top: 30px;
       padding: 20px;
       background: #0f172a;
-      color: #cbd5e1;
+      color: white;
       text-align: center;
       font-size: 13px;
     }
@@ -183,16 +178,11 @@
         font-size: 21px;
       }
 
-      .container {
-        width: 94%;
-        margin-top: 16px;
-      }
-
-      .table-box {
+      .panel {
         padding: 14px;
       }
 
-      .search {
+      #pencarian {
         max-width: none;
       }
     }
@@ -205,46 +195,46 @@
     <p>Sistem Informasi Tutorial dan Bahan Ajar (SITTA)</p>
   </header>
 
-  <main class="container">
+  <main>
     <div class="toolbar">
       <a class="btn" href="./dashboard.html">← Kembali ke Dashboard</a>
 
       <input
-        class="search"
         type="search"
         id="pencarian"
-        placeholder="Cari kode, nama, jenis, atau edisi bahan ajar..."
+        placeholder="Cari kode, nama, jenis, edisi, atau lokasi..."
         aria-label="Cari bahan ajar"
       >
     </div>
 
     <div id="pesan" role="alert"></div>
 
-    <section class="cards">
-      <div class="card">
-        <div class="label">Jumlah Jenis Bahan Ajar</div>
-        <div class="number" id="totalJenis">0</div>
+    <section class="ringkasan">
+      <div class="kartu">
+        <p>Jumlah Bahan Ajar</p>
+        <div class="angka" id="jumlahBahan">0</div>
       </div>
 
-      <div class="card">
-        <div class="label">Total Stok Tersedia</div>
-        <div class="number" id="totalStok">0</div>
+      <div class="kartu">
+        <p>Total Stok</p>
+        <div class="angka" id="totalStok">0</div>
       </div>
 
-      <div class="card">
-        <div class="label">Hasil Pencarian</div>
-        <div class="number" id="hasilCari">0</div>
+      <div class="kartu">
+        <p>Hasil Pencarian</p>
+        <div class="angka" id="jumlahHasil">0</div>
       </div>
     </section>
 
-    <section class="table-box">
+    <section class="panel">
       <h2>Daftar Bahan Ajar</h2>
 
-      <div class="table-scroll">
+      <div class="table-wrap">
         <table>
           <thead>
             <tr>
               <th>No.</th>
+              <th>Kode Lokasi</th>
               <th>Kode Bahan Ajar</th>
               <th>Nama Bahan Ajar</th>
               <th>Jenis</th>
@@ -255,7 +245,7 @@
 
           <tbody id="tabelBahanAjar">
             <tr>
-              <td colspan="6" class="empty">Memuat data bahan ajar...</td>
+              <td colspan="7" class="kosong">Memuat data...</td>
             </tr>
           </tbody>
         </table>
@@ -275,40 +265,10 @@
       const pencarian = document.getElementById("pencarian");
       const pesan = document.getElementById("pesan");
 
-      const totalJenis = document.getElementById("totalJenis");
-      const totalStok = document.getElementById("totalStok");
-      const hasilCari = document.getElementById("hasilCari");
+      const formatAngka = new Intl.NumberFormat("id-ID");
 
-      function tampilkanError(teks) {
-        pesan.textContent = teks;
-        pesan.style.display = "block";
-      }
-
-      function nilai(objek, kemungkinanNama, nilaiDefault = "-") {
-        for (const nama of kemungkinanNama) {
-          if (
-            objek &&
-            objek[nama] !== undefined &&
-            objek[nama] !== null &&
-            objek[nama] !== ""
-          ) {
-            return objek[nama];
-          }
-        }
-
-        return nilaiDefault;
-      }
-
-      function angka(nilaiInput) {
-        const hasil = Number(
-          String(nilaiInput).replace(/[^\d.-]/g, "")
-        );
-
-        return Number.isFinite(hasil) ? hasil : 0;
-      }
-
-      function teksAman(nilaiInput) {
-        return String(nilaiInput)
+      function aman(teks) {
+        return String(teks ?? "-")
           .replace(/&/g, "&amp;")
           .replace(/</g, "&lt;")
           .replace(/>/g, "&gt;")
@@ -316,68 +276,58 @@
           .replace(/'/g, "&#039;");
       }
 
-      function normalisasi(data) {
-        return data.map(function (item) {
-          return {
-            kode: nilai(item, [
-              "kode",
-              "kodeBahanAjar",
-              "kode_bahan_ajar",
-              "id"
-            ]),
-            nama: nilai(item, [
-              "nama",
-              "namaBahanAjar",
-              "nama_bahan_ajar",
-              "judul",
-              "judulBahanAjar"
-            ]),
-            jenis: nilai(item, [
-              "jenis",
-              "jenisBahanAjar",
-              "jenis_bahan_ajar",
-              "kategori"
-            ]),
-            edisi: nilai(item, [
-              "edisi",
-              "edisiBahanAjar",
-              "tahunEdisi",
-              "tahun_edisi"
-            ]),
-            stok: angka(nilai(item, [
-              "stok",
-              "jumlahStok",
-              "jumlah_stok",
-              "jumlah",
-              "tersedia"
-            ], 0))
-          };
-        });
-      }
+      function render() {
+        if (!Array.isArray(window.dataBahanAjar)) {
+          pesan.textContent =
+            "Data bahan ajar tidak ditemukan. Periksa file data.js.";
+          pesan.style.display = "block";
 
-      let daftarBahanAjar = [];
+          tabel.innerHTML =
+            '<tr><td colspan="7" class="kosong">' +
+            'Data gagal dimuat.</td></tr>';
 
-      function renderData() {
+          return;
+        }
+
+        pesan.style.display = "none";
+
+        const data = window.dataBahanAjar;
         const kata = pencarian.value.trim().toLowerCase();
 
-        const hasil = daftarBahanAjar.filter(function (item) {
-          return [
-            item.kode,
-            item.nama,
-            item.jenis,
-            item.edisi
-          ].some(function (isi) {
-            return String(isi).toLowerCase().includes(kata);
+        document.getElementById("jumlahBahan").textContent =
+          formatAngka.format(data.length);
+
+        document.getElementById("totalStok").textContent =
+          formatAngka.format(
+            data.reduce(function (total, item) {
+              return total + (Number(item.stok) || 0);
+            }, 0)
+          );
+
+        const hasil = data.filter(function (item) {
+          const kolom = [
+            item.kodeLokasi,
+            item.kodeBarang,
+            item.namaBarang,
+            item.jenisBarang,
+            item.edisi,
+            item.stok
+          ];
+
+          return kolom.some(function (nilai) {
+            return String(nilai ?? "")
+              .toLowerCase()
+              .includes(kata);
           });
         });
 
-        hasilCari.textContent = hasil.length;
+        document.getElementById("jumlahHasil").textContent =
+          formatAngka.format(hasil.length);
 
         if (hasil.length === 0) {
           tabel.innerHTML =
-            '<tr><td colspan="6" class="empty">' +
-            'Data bahan ajar tidak ditemukan.' +
-            '</td></tr>';
+            '<tr><td colspan="7" class="kosong">' +
+            'Bahan ajar tidak ditemukan.</td></tr>';
           return;
         }
 
@@ -385,50 +335,21 @@
           return `
             <tr>
               <td>${indeks + 1}</td>
-              <td>${teksAman(item.kode)}</td>
-              <td>${teksAman(item.nama)}</td>
-              <td>${teksAman(item.jenis)}</td>
-              <td>${teksAman(item.edisi)}</td>
-              <td><span class="badge">${item.stok}</span></td>
+              <td>${aman(item.kodeLokasi)}</td>
+              <td><strong>${aman(item.kodeBarang)}</strong></td>
+              <td>${aman(item.namaBarang)}</td>
+              <td>${aman(item.jenisBarang)}</td>
+              <td>${aman(item.edisi)}</td>
+              <td><span class="stok">${
+                formatAngka.format(Number(item.stok) || 0)
+              }</span></td>
             </tr>
           `;
         }).join("");
       }
 
-      function mulai() {
-        if (!Array.isArray(window.dataBahanAjar)) {
-          tabel.innerHTML =
-            '<tr><td colspan="6" class="empty">' +
-            'Data belum tersedia.</td></tr>';
-
-          tampilkanError(
-            "Data bahan ajar belum berhasil dimuat. Pastikan data.js tersedia dan mendefinisikan window.dataBahanAjar."
-          );
-          return;
-        }
-
-        daftarBahanAjar = normalisasi(window.dataBahanAjar);
-
-        totalJenis.textContent = daftarBahanAjar.length;
-
-        totalStok.textContent = daftarBahanAjar.reduce(
-          function (jumlah, item) {
-            return jumlah + item.stok;
-          },
-          0
-        );
-
-        renderData();
-
-        console.log(
-          "SITTA: jumlah data bahan ajar =",
-          daftarBahanAjar.length
-        );
-      }
-
-      pencarian.addEventListener("input", renderData);
-
-      mulai();
+      pencarian.addEventListener("input", render);
+      render();
     })();
   </script>
 </body>
