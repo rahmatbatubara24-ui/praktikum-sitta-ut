@@ -1,4 +1,4 @@
-```javascript
+
 // ==========================================
 // SITTA - DATA UTAMA
 // File: data.js
