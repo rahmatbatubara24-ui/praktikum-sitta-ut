@@ -1,4 +1,3 @@
-
 // ==========================================
 // SITTA - DATA UTAMA
 // File: data.js
@@ -219,4 +218,3 @@ window.dataPemesanan = {
 
 console.log("SITTA data.js berhasil dimuat.");
 console.log("Jumlah pengguna:", window.dataPengguna.length);
-```
