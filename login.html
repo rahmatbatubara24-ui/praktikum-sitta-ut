@@ -259,7 +259,7 @@
         Pastikan data.js berada satu folder dengan login.html.
         data.js harus berisi JavaScript saja, tanpa tag script HTML.
     -->
-    <script src="./data.js"></script>
+    <script src="./data.js" onerror="window.dataJsGagal = true;"></script>
 
     <script>
         (function () {
@@ -286,36 +286,58 @@
             }
 
             function periksaData() {
-                const daftarPengguna = ambilDataPengguna();
+    const daftarPengguna = window.dataPengguna;
 
-                if (!daftarPengguna || daftarPengguna.length === 0) {
-                    tombolLogin.disabled = true;
+    if (window.dataJsGagal) {
+        tombolLogin.disabled = true;
 
-                    tampilkanPesan(
-                        "Data pengguna belum berhasil dimuat. " +
-                        "Pastikan file data.js tersedia satu folder dengan login.html.",
-                        "error"
-                    );
+        tampilkanPesan(
+            "File data.js gagal dimuat. Periksa lokasi file dan deployment Vercel.",
+            "error"
+        );
 
-                    console.error(
-                        "SITTA: dataPengguna tidak ditemukan. " +
-                        "Periksa lokasi file data.js dan Console browser."
-                    );
+        console.error("SITTA: file data.js gagal dimuat.");
+        return false;
+    }
 
-                    return false;
-                }
+    if (!Array.isArray(daftarPengguna)) {
+        tombolLogin.disabled = true;
 
-                tombolLogin.disabled = false;
-                pesan.className = "message";
+        tampilkanPesan(
+            "File data.js terbuka, tetapi dataPengguna tidak ditemukan. " +
+            "Pastikan isi file data.js benar dan tidak ada error JavaScript.",
+            "error"
+        );
 
-                console.log(
-                    "SITTA: data.js berhasil dimuat. Jumlah pengguna:",
-                    daftarPengguna.length
-                );
+        console.error(
+            "SITTA: window.dataPengguna tidak tersedia.",
+            window.dataPengguna
+        );
 
-                return true;
-            }
+        return false;
+    }
 
+    if (daftarPengguna.length === 0) {
+        tombolLogin.disabled = true;
+
+        tampilkanPesan(
+            "Data pengguna kosong. Periksa isi file data.js.",
+            "error"
+        );
+
+        return false;
+    }
+
+    tombolLogin.disabled = false;
+    pesan.className = "message";
+
+    console.log(
+        "SITTA: data.js berhasil dimuat. Jumlah pengguna:",
+        daftarPengguna.length
+    );
+
+    return true;
+}
             togglePassword.addEventListener("click", function () {
                 const akanDitampilkan = inputPassword.type === "password";
 
