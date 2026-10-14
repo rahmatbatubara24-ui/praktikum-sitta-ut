@@ -1,0 +1,624 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laporan SITTA - Universitas Terbuka</title>
+<script src="./data.js"></script>
+<style>
+:root {
+  --primary:#123c69;
+  --primary2:#1e6091;
+  --bg:#f3f6fb;
+  --text:#243247;
+  --muted:#64748b;
+  --border:#dce4ee;
+  --green:#15803d;
+  --orange:#b45309;
+  --red:#b91c1c;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+header {
+  background:linear-gradient(120deg,var(--primary),var(--primary2));
+  color:white;
+  padding:25px 5%;
+}
+.header-inner {
+  max-width:1250px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  flex-wrap:wrap;
+}
+header h1 { margin:0 0 8px; font-size:25px; }
+header p { margin:0; opacity:.9; font-size:14px; }
+button,.button {
+  border:0;
+  border-radius:8px;
+  padding:10px 14px;
+  cursor:pointer;
+  font-weight:bold;
+  font-size:13px;
+  text-decoration:none;
+  display:inline-block;
+}
+.btn-light { background:white; color:var(--primary); }
+.btn-primary { background:var(--primary); color:white; }
+.btn-secondary { background:#e8eef6; color:var(--primary); }
+main {
+  max-width:1250px;
+  margin:25px auto;
+  padding:0 20px;
+}
+.tabs {
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-bottom:20px;
+}
+.tab {
+  background:white;
+  color:var(--muted);
+  border:1px solid var(--border);
+}
+.tab.active { background:var(--primary); color:white; }
+.cards {
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:15px;
+  margin-bottom:22px;
+}
+.card,.panel {
+  background:white;
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:18px;
+  box-shadow:0 3px 12px #0f172a08;
+}
+.card .label { color:var(--muted); font-size:13px; }
+.card .number { font-size:28px; font-weight:bold; margin:10px 0 4px; }
+.card .note { color:var(--muted); font-size:12px; }
+.panel { margin-bottom:20px; }
+.panel h2 { margin:0 0 6px; font-size:19px; }
+.description { color:var(--muted); font-size:13px; margin:0 0 18px; }
+.filters {
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin:15px 0;
+}
+input,select {
+  min-width:180px;
+  padding:11px 12px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:white;
+  color:var(--text);
+  font-size:14px;
+}
+.table-wrap { overflow-x:auto; width:100%; }
+table {
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+  min-width:760px;
+}
+th,td {
+  border-bottom:1px solid #e8edf4;
+  padding:12px 10px;
+  text-align:left;
+  vertical-align:top;
+}
+th {
+  background:#f5f8fc;
+  color:#475569;
+  white-space:nowrap;
+}
+tbody tr:hover { background:#f8fbff; }
+.badge {
+  display:inline-block;
+  border-radius:20px;
+  padding:5px 9px;
+  font-size:11px;
+  font-weight:bold;
+  white-space:nowrap;
+}
+.badge-green { background:#dcfce7; color:var(--green); }
+.badge-orange { background:#fef3c7; color:var(--orange); }
+.badge-blue { background:#dbeafe; color:#1d4ed8; }
+.badge-red { background:#fee2e2; color:var(--red); }
+.empty {
+  padding:25px;
+  text-align:center;
+  color:var(--muted);
+}
+.detail {
+  margin-top:15px;
+  padding:16px;
+  background:#f8fafc;
+  border:1px solid var(--border);
+  border-radius:10px;
+}
+.detail h3 { margin:0 0 12px; }
+.detail-grid {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+}
+.detail-item {
+  padding:10px;
+  background:white;
+  border-radius:7px;
+  border:1px solid var(--border);
+  overflow-wrap:anywhere;
+}
+.detail-item small { display:block; color:var(--muted); margin-bottom:5px; }
+.detail-item strong { font-size:13px; }
+.progress-list { margin-top:15px; }
+.progress-row {
+  border-left:3px solid #93c5fd;
+  margin:0 0 0 5px;
+  padding:0 0 18px 16px;
+}
+.progress-row:last-child { padding-bottom:0; }
+.progress-row strong { font-size:13px; }
+.progress-row p { margin:5px 0; font-size:13px; line-height:1.5; }
+.progress-row small { color:var(--muted); }
+.section { display:none; }
+.section.active { display:block; }
+.total-line {
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:15px;
+  padding:13px;
+  border-radius:8px;
+  background:#eff6ff;
+  font-weight:bold;
+}
+footer {
+  text-align:center;
+  color:var(--muted);
+  padding:25px 12px;
+  font-size:13px;
+}
+.notice {
+  background:#fff7ed;
+  border:1px solid #fed7aa;
+  color:#9a3412;
+  padding:12px;
+  border-radius:8px;
+  font-size:13px;
+  margin-bottom:15px;
+}
+@media(max-width:850px) {
+  .cards { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .detail-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media(max-width:520px) {
+  header h1 { font-size:21px; }
+  .cards { grid-template-columns:1fr 1fr; gap:9px; }
+  .card { padding:13px; }
+  .card .number { font-size:23px; }
+  main { padding:0 12px; }
+  .detail-grid { grid-template-columns:1fr; }
+}
+@media print {
+  body { background:white; }
+  header { background:white !important; color:#111 !important; padding:10px 0; }
+  header p { color:#333; }
+  main { max-width:none; padding:0; margin:10px 0; }
+  .tabs,.filters,.no-print,footer { display:none !important; }
+  .section { display:block !important; }
+  .panel,.card { box-shadow:none; break-inside:avoid; }
+  .cards { grid-template-columns:repeat(4,1fr); }
+  table { min-width:0; font-size:10px; }
+  th,td { padding:6px 4px; }
+  .table-wrap { overflow:visible; }
+  .detail { break-inside:avoid; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div>
+      <h1>Laporan SITTA</h1>
+      <p>Sistem Informasi Tiras dan Transaksi Bahan Ajar</p>
+      <p>Universitas Terbuka</p>
+    </div>
+    <div class="no-print" style="display:flex;gap:8px;flex-wrap:wrap">
+      <a class="button btn-light" href="./dashboard.html">Kembali ke Dashboard</a>
+      <button class="btn-light" onclick="window.print()">Cetak Laporan</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div id="errorData" class="notice" style="display:none"></div>
+
+  <div class="tabs no-print">
+    <button class="tab active" data-target="monitoring">Monitoring Progress DO</button>
+    <button class="tab" data-target="rekap">Rekap Bahan Ajar</button>
+  </div>
+
+  <section id="monitoring" class="section active">
+    <div class="cards">
+      <div class="card">
+        <div class="label">Total Nomor DO</div>
+        <div class="number" id="totalDO">0</div>
+        <div class="note">Data pemesanan tercatat</div>
+      </div>
+      <div class="card">
+        <div class="label">Dalam Perjalanan</div>
+        <div class="number" id="doPerjalanan">0</div>
+        <div class="note">Berdasarkan status tracking</div>
+      </div>
+      <div class="card">
+        <div class="label">Selesai Dikirim</div>
+        <div class="number" id="doSelesai">0</div>
+        <div class="note">Berdasarkan status tracking</div>
+      </div>
+      <div class="card">
+        <div class="label">Total Nilai Pesanan</div>
+        <div class="number" id="nilaiPesanan">Rp0</div>
+        <div class="note">Akumulasi data pemesanan</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Monitoring Progress DO Bahan Ajar</h2>
+      <p class="description">Cari nomor DO, nama pemesan, lokasi tujuan, atau ekspedisi. Pilih salah satu DO untuk melihat detail dan riwayat perjalanannya.</p>
+
+      <div class="filters no-print">
+        <input id="cariDO" type="search" placeholder="Cari nomor DO / nama / lokasi..." aria-label="Cari DO">
+        <select id="filterStatus" aria-label="Filter status">
+          <option value="">Semua status</option>
+          <option value="Dalam Perjalanan">Dalam Perjalanan</option>
+          <option value="Selesai Dikirim">Selesai Dikirim</option>
+          <option value="Diproses">Diproses</option>
+          <option value="Belum Ada Tracking">Belum Ada Tracking</option>
+        </select>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>Nomor DO</th>
+              <th>Nama Pemesan</th>
+              <th>Lokasi Tujuan</th>
+              <th>Tanggal Pesan</th>
+              <th>Tanggal Kirim</th>
+              <th>Ekspedisi</th>
+              <th>Jumlah Item</th>
+              <th>Total Pesanan</th>
+              <th>Status</th>
+              <th class="no-print">Detail</th>
+            </tr>
+          </thead>
+          <tbody id="tabelDO"></tbody>
+        </table>
+      </div>
+      <div id="kosongDO" class="empty" style="display:none">Tidak ada data DO yang sesuai dengan pencarian.</div>
+      <div id="detailDO"></div>
+    </div>
+  </section>
+
+  <section id="rekap" class="section">
+    <div class="cards">
+      <div class="card">
+        <div class="label">Jenis Data Bahan Ajar</div>
+        <div class="number" id="jumlahJenis">0</div>
+        <div class="note">Jumlah judul/kode barang</div>
+      </div>
+      <div class="card">
+        <div class="label">Total Stok</div>
+        <div class="number" id="totalStok">0</div>
+        <div class="note">Akumulasi stok yang tercatat</div>
+      </div>
+      <div class="card">
+        <div class="label">Jenis Barang</div>
+        <div class="number" id="jumlahTipe">0</div>
+        <div class="note">Jenis barang berbeda</div>
+      </div>
+      <div class="card">
+        <div class="label">Lokasi Penyimpanan</div>
+        <div class="number" id="jumlahLokasi">0</div>
+        <div class="note">Kode lokasi berbeda</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Rekap Bahan Ajar</h2>
+      <p class="description">Rekap persediaan berdasarkan data bahan ajar yang tersimpan di data.js.</p>
+      <div class="filters no-print">
+        <input id="cariBahan" type="search" placeholder="Cari kode, nama, atau lokasi..." aria-label="Cari bahan ajar">
+        <select id="filterJenis" aria-label="Filter jenis bahan ajar">
+          <option value="">Semua jenis barang</option>
+        </select>
+        <button class="btn-primary" onclick="window.print()">Cetak Rekap</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>Kode Lokasi</th>
+              <th>Kode Barang</th>
+              <th>Nama Bahan Ajar</th>
+              <th>Jenis Barang</th>
+              <th>Edisi</th>
+              <th>Stok</th>
+            </tr>
+          </thead>
+          <tbody id="tabelBahan"></tbody>
+        </table>
+      </div>
+      <div id="kosongBahan" class="empty" style="display:none">Tidak ada bahan ajar yang sesuai dengan pencarian.</div>
+      <div class="total-line">
+        <span>Total stok sesuai filter</span>
+        <span id="totalStokFilter">0</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>Aplikasi by Sumardi Hutabarat</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  const bahanAjar = Array.isArray(window.dataBahanAjar)
+    ? window.dataBahanAjar : [];
+  const pemesanan = window.dataPemesanan &&
+    typeof window.dataPemesanan === "object" ? window.dataPemesanan : {};
+  const tracking = window.dataTracking &&
+    typeof window.dataTracking === "object" ? window.dataTracking : {};
+
+  const rupiah = angka => new Intl.NumberFormat("id-ID", {
+    style: "currency", currency: "IDR", maximumFractionDigits: 0
+  }).format(Number(angka) || 0);
+
+  const tanggal = nilai => {
+    if (!nilai) return "-";
+    const d = new Date(String(nilai).replace(" ", "T"));
+    if (Number.isNaN(d.getTime())) return nilai;
+    return new Intl.DateTimeFormat("id-ID", {
+      day: "2-digit", month: "short", year: "numeric"
+    }).format(d);
+  };
+
+  const aman = nilai => String(nilai ?? "-").replace(/[&<>"']/g, c => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  })[c]);
+
+  const statusDO = nomor => {
+    const t = tracking[nomor];
+    const p = pemesanan[nomor];
+    return (t && t.status) || (p && p.statusPesanan) || "Belum Ada Tracking";
+  };
+
+  const kelasStatus = status => {
+    const s = String(status).toLowerCase();
+    if (s.includes("selesai")) return "badge-green";
+    if (s.includes("perjalanan")) return "badge-blue";
+    if (s.includes("proses")) return "badge-orange";
+    return "badge-red";
+  };
+
+  const daftarDO = Object.keys(pemesanan).map(nomor => {
+    const p = pemesanan[nomor] || {};
+    const t = tracking[nomor] || {};
+    const daftar = Array.isArray(p.daftarPesanan) ? p.daftarPesanan : [];
+    return {
+      nomor,
+      nama: p.nama || t.nama || "-",
+      lokasi: p.lokasi || "-",
+      tanggalPesan: p.tanggalPesan || "-",
+      tanggalKirim: t.tanggalKirim || "-",
+      ekspedisi: t.ekspedisi || "-",
+      jumlah: p.totalItem ?? daftar.reduce((sum, item) =>
+        sum + (Number(item.jumlah) || 0), 0),
+      total: Number(p.totalPembayaran) ||
+        daftar.reduce((sum, item) => sum + (Number(item.subtotal) || 0), 0),
+      status: statusDO(nomor)
+    };
+  });
+
+  const jumlahSelesai = daftarDO.filter(d =>
+    d.status.toLowerCase().includes("selesai")).length;
+  const jumlahPerjalanan = daftarDO.filter(d =>
+    d.status.toLowerCase().includes("perjalanan")).length;
+  const totalNilai = daftarDO.reduce((sum, d) => sum + d.total, 0);
+
+  document.getElementById("totalDO").textContent = daftarDO.length;
+  document.getElementById("doPerjalanan").textContent = jumlahPerjalanan;
+  document.getElementById("doSelesai").textContent = jumlahSelesai;
+  document.getElementById("nilaiPesanan").textContent = rupiah(totalNilai);
+
+  function renderDO() {
+    const cari = document.getElementById("cariDO").value.trim().toLowerCase();
+    const filter = document.getElementById("filterStatus").value;
+    const hasil = daftarDO.filter(d => {
+      const cocokCari = [
+        d.nomor, d.nama, d.lokasi, d.ekspedisi, d.status
+      ].join(" ").toLowerCase().includes(cari);
+      return cocokCari && (!filter || d.status === filter);
+    });
+
+    const tbody = document.getElementById("tabelDO");
+    tbody.innerHTML = hasil.map((d, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td><strong>${aman(d.nomor)}</strong></td>
+        <td>${aman(d.nama)}</td>
+        <td>${aman(d.lokasi)}</td>
+        <td>${aman(tanggal(d.tanggalPesan))}</td>
+        <td>${aman(tanggal(d.tanggalKirim))}</td>
+        <td>${aman(d.ekspedisi)}</td>
+        <td>${d.jumlah}</td>
+        <td>${rupiah(d.total)}</td>
+        <td><span class="badge ${kelasStatus(d.status)}">${aman(d.status)}</span></td>
+        <td class="no-print"><button class="btn-secondary" onclick="lihatDetailDO('${aman(d.nomor)}')">Lihat</button></td>
+      </tr>
+    `).join("");
+
+    document.getElementById("kosongDO").style.display =
+      hasil.length ? "none" : "block";
+  }
+
+  window.lihatDetailDO = function (nomor) {
+    const p = pemesanan[nomor];
+    const t = tracking[nomor];
+    const wadah = document.getElementById("detailDO");
+
+    if (!p && !t) {
+      wadah.innerHTML = '<div class="detail">Detail DO tidak ditemukan.</div>';
+      return;
+    }
+
+    const daftar = p && Array.isArray(p.daftarPesanan)
+      ? p.daftarPesanan : [];
+    const perjalanan = t && Array.isArray(t.perjalanan)
+      ? t.perjalanan : [];
+    const status = statusDO(nomor);
+
+    wadah.innerHTML = `
+      <div class="detail">
+        <h3>Detail DO: ${aman(nomor)}</h3>
+        <div class="detail-grid">
+          <div class="detail-item"><small>Nama Pemesan</small><strong>${aman((p && p.nama) || (t && t.nama) || "-")}</strong></div>
+          <div class="detail-item"><small>NIM</small><strong>${aman((p && p.nim) || "-")}</strong></div>
+          <div class="detail-item"><small>Lokasi Tujuan</small><strong>${aman((p && p.lokasi) || "-")}</strong></div>
+          <div class="detail-item"><small>Tanggal Pesan</small><strong>${aman(tanggal(p && p.tanggalPesan))}</strong></div>
+          <div class="detail-item"><small>Tanggal Kirim</small><strong>${aman(tanggal(t && t.tanggalKirim))}</strong></div>
+          <div class="detail-item"><small>Ekspedisi</small><strong>${aman((t && t.ekspedisi) || "-")}</strong></div>
+          <div class="detail-item"><small>Status</small><strong>${aman(status)}</strong></div>
+          <div class="detail-item"><small>Total Item</small><strong>${p ? (p.totalItem ?? daftar.reduce((s,x)=>s+(Number(x.jumlah)||0),0)) : 0}</strong></div>
+          <div class="detail-item"><small>Total Pembayaran</small><strong>${rupiah(p && p.totalPembayaran)}</strong></div>
+        </div>
+        <h3 style="margin-top:20px">Daftar Pesanan</h3>
+        <div class="table-wrap">
+          <table style="min-width:500px">
+            <thead><tr><th>Kode Barang</th><th>Nama Bahan Ajar</th><th>Jumlah</th><th>Harga</th><th>Subtotal</th></tr></thead>
+            <tbody>
+              ${daftar.length ? daftar.map(x => `
+                <tr>
+                  <td>${aman(x.kodeBarang)}</td>
+                  <td>${aman(x.namaBarang)}</td>
+                  <td>${Number(x.jumlah)||0}</td>
+                  <td>${rupiah(x.harga)}</td>
+                  <td>${rupiah(x.subtotal)}</td>
+                </tr>`).join("") :
+                '<tr><td colspan="5">Tidak ada rincian pesanan.</td></tr>'}
+            </tbody>
+          </table>
+        </div>
+        <h3 style="margin-top:20px">Riwayat Perjalanan</h3>
+        <div class="progress-list">
+          ${perjalanan.length ? perjalanan.map(x => `
+            <div class="progress-row">
+              <strong>${aman(tanggal(x.waktu))} ${aman(x.waktu && x.waktu.slice(11,19))}</strong>
+              <p>${aman(x.keterangan)}</p>
+            </div>`).join("") :
+            '<p class="description">Belum ada riwayat perjalanan untuk DO ini.</p>'}
+        </div>
+        <div class="no-print" style="margin-top:18px">
+          <button class="btn-primary" onclick="window.print()">Cetak Detail</button>
+          <button class="btn-secondary" onclick="document.getElementById('detailDO').innerHTML=''">Tutup Detail</button>
+        </div>
+      </div>
+    `;
+    wadah.scrollIntoView({behavior:"smooth", block:"start"});
+  };
+
+  document.getElementById("cariDO").addEventListener("input", renderDO);
+  document.getElementById("filterStatus").addEventListener("change", renderDO);
+  renderDO();
+
+  // Rekap bahan ajar
+  const totalStok = bahanAjar.reduce((sum, b) =>
+    sum + (Number(b.stok) || 0), 0);
+  const jenisUnik = [...new Set(bahanAjar.map(b => b.jenisBarang).filter(Boolean))];
+  const lokasiUnik = [...new Set(bahanAjar.map(b => b.kodeLokasi).filter(Boolean))];
+
+  document.getElementById("jumlahJenis").textContent = bahanAjar.length;
+  document.getElementById("totalStok").textContent =
+    totalStok.toLocaleString("id-ID");
+  document.getElementById("jumlahTipe").textContent = jenisUnik.length;
+  document.getElementById("jumlahLokasi").textContent = lokasiUnik.length;
+
+  const filterJenis = document.getElementById("filterJenis");
+  jenisUnik.forEach(jenis => {
+    const option = document.createElement("option");
+    option.value = jenis;
+    option.textContent = jenis;
+    filterJenis.appendChild(option);
+  });
+
+  function renderBahan() {
+    const cari = document.getElementById("cariBahan").value.trim().toLowerCase();
+    const jenis = filterJenis.value;
+    const hasil = bahanAjar.filter(b => {
+      const teks = [
+        b.kodeLokasi, b.kodeBarang, b.namaBarang, b.jenisBarang, b.edisi
+      ].join(" ").toLowerCase();
+      return teks.includes(cari) && (!jenis || b.jenisBarang === jenis);
+    });
+
+    document.getElementById("tabelBahan").innerHTML = hasil.map((b,i) => `
+      <tr>
+        <td>${i+1}</td>
+        <td>${aman(b.kodeLokasi)}</td>
+        <td><strong>${aman(b.kodeBarang)}</strong></td>
+        <td>${aman(b.namaBarang)}</td>
+        <td>${aman(b.jenisBarang)}</td>
+        <td>${aman(b.edisi)}</td>
+        <td>${(Number(b.stok)||0).toLocaleString("id-ID")}</td>
+      </tr>
+    `).join("");
+
+    document.getElementById("kosongBahan").style.display =
+      hasil.length ? "none" : "block";
+    document.getElementById("totalStokFilter").textContent =
+      hasil.reduce((sum,b)=>sum+(Number(b.stok)||0),0).toLocaleString("id-ID");
+  }
+
+  document.getElementById("cariBahan").addEventListener("input", renderBahan);
+  filterJenis.addEventListener("change", renderBahan);
+  renderBahan();
+
+  // Navigasi dua bagian laporan
+  document.querySelectorAll(".tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+      document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+      tab.classList.add("active");
+      document.getElementById(tab.dataset.target).classList.add("active");
+    });
+  });
+
+  // Beri tahu jika file data.js belum terbaca
+  if (!window.dataBahanAjar || !window.dataPemesanan || !window.dataTracking) {
+    const el = document.getElementById("errorData");
+    el.style.display = "block";
+    el.textContent = "Sebagian data SITTA belum terbaca. Pastikan file data.js berada di folder yang sama dengan laporan.html dan nama variabel datanya sesuai.";
+  }
+})();
+</script>
+</body>
+</html>
