@@ -259,7 +259,7 @@
         Pastikan data.js berada satu folder dengan login.html.
         data.js harus berisi JavaScript saja, tanpa tag script HTML.
     -->
-    <script src="./data.js" onerror="window.dataJsGagal = true;"></script>
+    <script     src="/data.js?v=20261014"     onerror="window.dataJsGagal = true;" ></script>
 
     <script>
         (function () {
@@ -284,7 +284,9 @@
 
                 return null;
             }
-
+console.log("Alamat halaman:", window.location.href);
+console.log("Data pengguna tersedia:", Array.isArray(window.dataPengguna));
+console.log("Isi data pengguna:", window.dataPengguna);
             function periksaData() {
     const daftarPengguna = window.dataPengguna;
 
